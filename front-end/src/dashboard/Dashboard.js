@@ -25,14 +25,31 @@ function Dashboard({ date }) {
   }
   console.log(reservations);
   return (
-    <main className="Dashboard">
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
-      </div>
-      <ErrorAlert error={reservationsError} />
-      {JSON.stringify(reservations)}
-    </main>
+    <>
+      <header>
+        <h1>Dashboard</h1>
+        <div className="d-md-flex mb-3">
+          <h4 className="mb-0">Reservations for date</h4>
+        </div>
+      </header>
+      <main className="Dashboard">
+        <nav className="dashboard-controls">
+          <div className="day-toggles">
+            <button className="btn border">
+              <i className="fa-solid fa-chevron-left"></i>
+            </button>
+            <button className="btn border">
+              <i className="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+          <div className="date-range">
+            <p>Date Range</p>
+          </div>
+        </nav>
+        <ErrorAlert error={reservationsError} />
+        {JSON.stringify(reservations)}
+      </main>
+    </>
   );
 }
 
