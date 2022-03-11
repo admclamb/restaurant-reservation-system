@@ -33,7 +33,7 @@ function Dashboard({ date }) {
         </div>
       </header>
       <main className="Dashboard">
-        <nav className="dashboard-controls">
+        <nav className="dashboard-controls d-flex justify-content-between">
           <div className="day-toggles">
             <button className="btn border">
               <i className="fa-solid fa-chevron-left"></i>
