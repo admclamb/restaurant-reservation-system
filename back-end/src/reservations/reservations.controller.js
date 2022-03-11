@@ -1,5 +1,6 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const hasProperties = require("../errors/hasProperties");
 
 const VALID_PROPERTIES = [
   "first_name",
@@ -8,6 +9,8 @@ const VALID_PROPERTIES = [
   "reservation_date",
   "reservation_time",
 ];
+
+const hasRequiredProperties = hasProperties(VALID_PROPERTIES);
 
 function hasOnlyValidProperties(req, res, next) {
   const { data = {} } = req.body;
@@ -25,12 +28,16 @@ function hasOnlyValidProperties(req, res, next) {
   next();
 }
 
+function validatePeople(req, res, next) {
+  const { data = {} } = req.body;
+  const { people = null } = data;
+  console.log(people);
+  next();
+}
 
 async function list(req, res) {
   const reservations = await service.list();
-  res.status(201).json({
-    data: reservations,
-  });
+  res.status(201).json({ data: reservations });
 }
 
 async function create(req, res) {
@@ -41,5 +48,10 @@ async function create(req, res) {
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  create,
+  create: [
+    hasOnlyValidProperties,
+    hasRequiredProperties,
+    validatePeople,
+    asyncErrorBoundary(create),
+  ],
 };
