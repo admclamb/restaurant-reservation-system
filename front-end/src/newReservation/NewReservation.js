@@ -36,6 +36,8 @@ const NewReservation = () => {
     history.push("/dashboard");
     return;
   };
+
+  console.log(reservation);
   return (
     <>
       <h1>New Reservation</h1>
@@ -49,7 +51,7 @@ const NewReservation = () => {
               className="form-control"
               placeholder="First name"
               aria-describedby="firstName"
-              value={reservation.firstName}
+              value={reservation.first_name}
               onChange={handleChange}
             />
           </label>
@@ -63,7 +65,7 @@ const NewReservation = () => {
               className="form-control"
               placeholder="Last name"
               aria-describedby="lastName"
-              value={reservation.lastName}
+              value={reservation.last_name}
               onChange={handleChange}
             />
           </label>
@@ -88,11 +90,11 @@ const NewReservation = () => {
             <input
               type="date"
               name="reservation_date"
-              id="date"
+              id="reservation_date"
               className="form-control"
               placeholder="Reservation date"
               aria-describedby="date"
-              value={reservation.date}
+              value={reservation.reservation_date}
               onChange={handleChange}
             />
           </label>
@@ -103,11 +105,11 @@ const NewReservation = () => {
             <input
               type="time"
               name="reservation_time"
-              id="time"
+              id="reservation_time"
               className="form-control"
               placeholder="Reservatoin time"
               aria-describedby="time"
-              value={reservation.time}
+              value={reservation.reservation_time}
               onChange={handleChange}
             />
           </label>
@@ -121,7 +123,7 @@ const NewReservation = () => {
               className="form-control"
               placeholder="Number of people"
               aria-describedby="numberOfPeople"
-              value={reservation.numberOfPeople}
+              value={reservation.people}
               onChange={handleChange}
             />
           </label>

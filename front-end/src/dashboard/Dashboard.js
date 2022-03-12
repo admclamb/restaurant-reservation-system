@@ -5,6 +5,7 @@ import "./Dashboard.css";
 import ChangeDate from "./ChangeDate";
 import { useLocation } from "react-router-dom";
 import ReservationsTable from "./ReservationsTable";
+import { today } from "../utils/date-time";
 
 /**
  * Defines the dashboard page.
@@ -12,22 +13,32 @@ import ReservationsTable from "./ReservationsTable";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date }) {
+function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-  const [paramDate, setParamDate] = useState("");
-  const param = new URLSearchParams(useLocation().search).get("date");
-  useEffect(loadDashboard, [date, paramDate]);
+  const [date, setDate] = useState(today());
+  // const URLSearchParams = new URLSearchParams(useLocation().search);
+  // useEffect(() => {
+  //   if (URLSearchParams) {
+  //     setDate(URLSearchParams.get("date"));
+  //   }
+  // }, []);
+
+  useEffect(loadDashboard, [date]);
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    const outDate = paramDate ? paramDate : date;
-    console.log(outDate);
-    listReservations({ outDate }, abortController.signal)
+    listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
   }
+
+  const handleDateChange = ({ target }) => {
+    const { id } = target;
+    if (id === "decrement-date") {
+    }
+  };
   return (
     <>
       <header className="p-2">
@@ -44,11 +55,17 @@ function Dashboard({ date }) {
                 <h3>{date}</h3>
               </div>
               <div className="day-toggles d-flex">
-                <button className="btn border">
+                <button
+                  className="btn border"
+                  onClick={handleDateChange}
+                  id="decrement-date"
+                >
                   <i className="fa-solid fa-chevron-left"></i>
                 </button>
-                <button className="btn border">Today</button>
-                <button className="btn border">
+                <button className="btn border" id="current-date">
+                  Today
+                </button>
+                <button className="btn border" id="increment-date">
                   <i className="fa-solid fa-chevron-right"></i>
                 </button>
               </div>
