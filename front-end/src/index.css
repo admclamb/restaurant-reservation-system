@@ -1,3 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a {
+  margin: 0;
+}
+
 h1 {
   font-size: 3.052rem;
 }
@@ -21,3 +38,5 @@ p {
 .text-p {
   font-size: 1.25rem;
 }
+
+/* Resets */

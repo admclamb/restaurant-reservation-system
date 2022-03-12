@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import "./Dashboard.css";
+import ChangeDate from "./ChangeDate";
+import { useLocation } from "react-router-dom";
+import ReservationsTable from "./ReservationsTable";
 
 /**
  * Defines the dashboard page.
@@ -12,42 +15,53 @@ import "./Dashboard.css";
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
-
-  useEffect(loadDashboard, [date]);
-
+  const [paramDate, setParamDate] = useState("");
+  const param = new URLSearchParams(useLocation().search).get("date");
+  useEffect(loadDashboard, [date, paramDate]);
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
-    listReservations({ date }, abortController.signal)
+    const outDate = paramDate ? paramDate : date;
+    console.log(outDate);
+    listReservations({ outDate }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
     return () => abortController.abort();
   }
-  console.log(reservations);
   return (
     <>
-      <header>
+      <header className="p-2">
         <h1>Dashboard</h1>
         <div className="d-md-flex mb-3">
           <h4 className="mb-0">Reservations for date</h4>
         </div>
       </header>
       <main className="Dashboard">
-        <nav className="dashboard-controls d-flex justify-content-between">
-          <div className="day-toggles">
-            <button className="btn border">
-              <i className="fa-solid fa-chevron-left"></i>
-            </button>
-            <button className="btn border">
-              <i className="fa-solid fa-chevron-right"></i>
-            </button>
-          </div>
-          <div className="date-range">
-            <p>Date Range</p>
+        <nav className=" dashboard-nav dashboard-controls">
+          <div className="container-fluid d-flex justify-content-between align-items-center pt-3 pb-3">
+            <div className="left d-flex">
+              <div className="date me-4">
+                <h3>{date}</h3>
+              </div>
+              <div className="day-toggles d-flex">
+                <button className="btn border">
+                  <i className="fa-solid fa-chevron-left"></i>
+                </button>
+                <button className="btn border">Today</button>
+                <button className="btn border">
+                  <i className="fa-solid fa-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <div className="right d-flex align-items-center">
+              <p className="me-3">Date</p>
+              <ChangeDate />
+            </div>
           </div>
         </nav>
         <ErrorAlert error={reservationsError} />
-        {JSON.stringify(reservations)}
+        <ReservationsTable reservations={reservations} />
       </main>
     </>
   );
