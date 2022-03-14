@@ -27,7 +27,7 @@ const validation = {
   },
   isTime: function (str) {
     const pattern = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-    return pattern.test(str);
+    return pattern.test(str); //return boolean value
   },
 };
 
@@ -47,34 +47,48 @@ function hasOnlyValidProperties(req, res, next) {
   }
   next();
 }
+
 function validatePeople(req, res, next) {
   const { data = {} } = req.body;
   const { people = null } = data;
-  if (people === "0" || people === 0) {
-    next({
+  if (isNaN(people)) {
+    return next({
       status: 400,
-      message: `Error, amount of people must be greater than zero.`,
+      message: "people",
     });
   }
-  if (!validation.isNumber(people)) {
-    next({
-      status: 400,
-      message: "Error, amount of people must be a number.",
-    });
+  if (validation.isNumber(people) && Number(people) >= 0 && !isNaN(people)) {
+    return next();
   }
-  next();
+  next({
+    status: 400,
+    message: "people",
+  });
 }
 
 function validateTime(req, res, next) {
   const { data = {} } = req.body;
   const { reservation_time = null } = data;
   if (!validation.isTime(reservation_time)) {
-    next({
+    return next({
       status: 400,
-      message: "Error, reservation time must be a time",
+      message: "reservation_time",
     });
   }
   next();
+}
+
+function validateDate(req, res, next) {
+  const { data = {} } = req.body;
+  const { reservation_date = null } = data;
+  if (validation.isDate(reservation_date)) {
+    return next();
+  }
+  console.log("Not valid");
+  next({
+    status: 400,
+    message: "reservation_date",
+  });
 }
 
 async function list(req, res) {
@@ -83,18 +97,20 @@ async function list(req, res) {
 }
 
 async function create(req, res) {
-  const reservation = req.body.data;
+  const { data = {} } = req.body;
+  const reservation = data;
   const createdReservation = await service.create(reservation);
+  console.log("createdReservation", createdReservation);
   res.status(201).json({ data: createdReservation });
 }
-
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
     hasOnlyValidProperties,
     hasRequiredProperties,
-    validatePeople,
+    validateDate,
     validateTime,
+    validatePeople,
     asyncErrorBoundary(create),
   ],
 };

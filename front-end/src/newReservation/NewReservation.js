@@ -30,17 +30,12 @@ const NewReservation = () => {
   };
 
   const handleSubmit = async (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-
+    event.preventDefault();
     const createdReservation = await createReservation(reservation);
+    console.log(createdReservation);
     setReservation(initReservation);
     setValidated(true);
     history.push("/dashboard");
-    return;
   };
 
   return (
@@ -50,7 +45,6 @@ const NewReservation = () => {
         className="row g-3 needs-validation"
         id="new-reservation-form"
         noValidate
-        validated={validated}
         onSubmit={handleSubmit}
       >
         <div className="col-md-4">
@@ -148,7 +142,9 @@ const NewReservation = () => {
           <div className="valid-feedback">Looks Good!</div>
         </div>
         <div className="form-btns">
-          <button className="btn btn-secondary me-3">Cancel</button>
+          <button className="btn btn-secondary me-3" onClick={handleCancel}>
+            Cancel
+          </button>
           <button
             className="btn btn-primary"
             type="submit"
