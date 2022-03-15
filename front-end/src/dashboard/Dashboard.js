@@ -5,7 +5,7 @@ import "./Dashboard.css";
 import ChangeDate from "./ChangeDate";
 
 import ReservationsTable from "./ReservationsTable";
-import { today } from "../utils/date-time";
+import { today, next, previous } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 /**
  * Defines the dashboard page.
@@ -34,12 +34,6 @@ function Dashboard() {
       .catch(setReservationsError);
     return () => abortController.abort();
   }
-
-  const handleDateChange = ({ target }) => {
-    const { id } = target;
-    if (id === "decrement-date") {
-    }
-  };
   return (
     <>
       <header className="p-2">
@@ -58,15 +52,23 @@ function Dashboard() {
               <div className="day-toggles d-flex">
                 <button
                   className="btn border"
-                  onClick={handleDateChange}
+                  onClick={() => setDate((currDate) => previous(currDate))}
                   id="decrement-date"
                 >
                   <i className="fa-solid fa-chevron-left"></i>
                 </button>
-                <button className="btn border" id="current-date">
+                <button
+                  className="btn border"
+                  id="current-date"
+                  onClick={() => setDate(today())}
+                >
                   Today
                 </button>
-                <button className="btn border" id="increment-date">
+                <button
+                  className="btn border"
+                  id="increment-date"
+                  onClick={() => setDate((currDate) => next(currDate))}
+                >
                   <i className="fa-solid fa-chevron-right"></i>
                 </button>
               </div>
@@ -74,7 +76,7 @@ function Dashboard() {
 
             <div className="right d-flex align-items-center">
               <p className="me-3">Date</p>
-              <ChangeDate />
+              <ChangeDate date={date} setDate={setDate} />
             </div>
           </div>
         </nav>

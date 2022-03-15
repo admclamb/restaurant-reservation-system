@@ -9,7 +9,16 @@ const ReservationsTableRows = ({ reservations }) => {
     return <>{tableRowData}</>;
   }
 
-  return <p>No table data</p>;
+  return (
+    <tr>
+      <td>No Resrevations Today...</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  );
 };
 
 export default ReservationsTableRows;

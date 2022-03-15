@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 
 const NewReservation = () => {
   const initReservation = {
@@ -11,9 +12,11 @@ const NewReservation = () => {
     reservation_time: "",
     people: 0,
   };
+
   const [reservation, setReservation] = useState(initReservation);
-  const [validated, setValidated] = useState(false);
+  const [reservationError, setReservationError] = useState(null);
   const history = useHistory();
+
   const handleChange = ({ target }) => {
     const { id } = target;
     setReservation({
@@ -31,20 +34,23 @@ const NewReservation = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const createdReservation = await createReservation(reservation);
-    console.log(createdReservation);
-    setReservation(initReservation);
-    setValidated(true);
-    history.push("/dashboard");
+    try {
+      const response = await createReservation(reservation);
+      setReservation(initReservation);
+      history.push(`/dashboard?date=${reservation.reservation_date}`);
+    } catch (error) {
+      setReservationError(error);
+      console.log(error);
+    }
   };
 
   return (
     <main className="container pt-3 mb-5">
       <h1>New Reservation</h1>
+      <ErrorAlert error={reservationError} />
       <form
-        className="row g-3 needs-validation"
+        className="row g-3"
         id="new-reservation-form"
-        noValidate
         onSubmit={handleSubmit}
       >
         <div className="col-md-4">
@@ -76,23 +82,21 @@ const NewReservation = () => {
           <div className="invalid-feedback">Must provide a last name.</div>
           <div className="valid-feedback">Looks Good!</div>
         </div>
-        <div className="col-md-4">
-          <label htmlFor="mobile_number">
-            Mobile Number
-            <input
-              name="mobile_number"
-              type="tel"
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              id="mobile_number"
-              className="form-control"
-              placeholder="Mobile number"
-              aria-describedby="phoneNumber"
-              value={reservation.mobile_number}
-              onChange={handleChange}
-            />
-            <div className="invalid-feedback">Must provide a phone number.</div>
-            <div className="valid-feedback">Looks Good!</div>
-          </label>
+        <div className="col-12 col-md-4">
+          <label htmlFor="mobile_number">Mobile Number</label>
+          <input
+            name="mobile_number"
+            type="tel"
+            // pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            id="mobile_number"
+            className="form-control"
+            placeholder="Mobile number"
+            aria-describedby="phoneNumber"
+            value={reservation.mobile_number}
+            onChange={handleChange}
+          />
+          <div className="invalid-feedback">Must provide a phone number.</div>
+          <div className="valid-feedback">Looks Good!</div>
         </div>
         <div className="col-md-3">
           <label htmlFor="date">Date of Reservation</label>
@@ -124,7 +128,7 @@ const NewReservation = () => {
           <div className="invalid-feedback">Must provide a time.</div>
           <div className="valid-feedback">Looks Good!</div>
         </div>
-        <div className="col-3">
+        <div className="col-12 col-md-3">
           <label htmlFor="people">Number of People</label>
           <input
             type="number"
