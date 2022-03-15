@@ -3,10 +3,10 @@ import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import "./Dashboard.css";
 import ChangeDate from "./ChangeDate";
-import { useLocation } from "react-router-dom";
+
 import ReservationsTable from "./ReservationsTable";
 import { today } from "../utils/date-time";
-
+import useQuery from "../utils/useQuery";
 /**
  * Defines the dashboard page.
  * @param date
@@ -17,13 +17,14 @@ function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [date, setDate] = useState(today());
-  // const URLSearchParams = new URLSearchParams(useLocation().search);
-  // useEffect(() => {
-  //   if (URLSearchParams) {
-  //     setDate(URLSearchParams.get("date"));
-  //   }
-  // }, []);
+  const query = useQuery();
 
+  useEffect(() => {
+    const queryDate = query.get("date");
+    if (queryDate) {
+      setDate(queryDate);
+    }
+  }, []);
   useEffect(loadDashboard, [date]);
   function loadDashboard() {
     const abortController = new AbortController();

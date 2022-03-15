@@ -51,19 +51,22 @@ function hasOnlyValidProperties(req, res, next) {
 function validatePeople(req, res, next) {
   const { data = {} } = req.body;
   const { people = null } = data;
+  console.log(people);
+  console.log(isNaN(people));
   if (isNaN(people)) {
     return next({
       status: 400,
       message: "people",
     });
   }
-  if (validation.isNumber(people) && Number(people) >= 0 && !isNaN(people)) {
-    return next();
+  if (Number(people) <= 0) {
+    return next({
+      status: 400,
+      message: "people",
+    });
   }
-  next({
-    status: 400,
-    message: "people",
-  });
+
+  next();
 }
 
 function validateTime(req, res, next) {
@@ -84,7 +87,6 @@ function validateDate(req, res, next) {
   if (validation.isDate(reservation_date)) {
     return next();
   }
-  console.log("Not valid");
   next({
     status: 400,
     message: "reservation_date",
@@ -92,8 +94,11 @@ function validateDate(req, res, next) {
 }
 
 async function list(req, res) {
-  const reservations = await service.list();
-  res.status(201).json({ data: reservations });
+  const { date = "" } = req.query;
+  console.log(date);
+  const data = date ? await service.listByDate(date) : await service.list();
+  console.log(data);
+  res.status(201).json({ data });
 }
 
 async function create(req, res) {

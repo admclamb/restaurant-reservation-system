@@ -4,6 +4,9 @@ function list() {
   return knex("reservations").select("*");
 }
 
+function listByDate(reservation_date) {
+  return knex("reservations").select("*").where({ reservation_date });
+}
 function create(reservation) {
   return knex("reservations")
     .insert(reservation)
@@ -14,4 +17,5 @@ function create(reservation) {
 module.exports = {
   list,
   create,
+  listByDate,
 };
