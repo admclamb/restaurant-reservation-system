@@ -98,7 +98,11 @@ async function list(req, res) {
   console.log(date);
   const data = date ? await service.listByDate(date) : await service.list();
   console.log(data);
-  res.status(201).json({ data });
+  const sortedData = data.sort((firstEl, secEl) => {
+    return firstEl.reservation_time.localeCompare(secEl.reservation_time);
+  });
+  console.log(sortedData);
+  res.status(201).json({ data: sortedData });
 }
 
 async function create(req, res) {

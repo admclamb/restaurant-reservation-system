@@ -1,3 +1,5 @@
+import { formatAsDate, formatAsTime } from "../utils/date-time";
+
 const TableRowCard = ({ reservation }) => {
   const {
     people,
@@ -14,8 +16,8 @@ const TableRowCard = ({ reservation }) => {
       <td>{first_name}</td>
       <td>{last_name}</td>
       <td>{mobile_number}</td>
-      <td>{reservation_time}</td>
-      <td>{reservation_date}</td>
+      <td>{formatAsTime(reservation_time)}</td>
+      <td>{formatAsDate(reservation_date)}</td>
     </tr>
   );
 };

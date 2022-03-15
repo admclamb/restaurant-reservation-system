@@ -5,7 +5,7 @@ import "./Dashboard.css";
 import ChangeDate from "./ChangeDate";
 
 import ReservationsTable from "./ReservationsTable";
-import { today, next, previous } from "../utils/date-time";
+import { today, next, previous, formatAsDate } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 /**
  * Defines the dashboard page.
@@ -47,7 +47,7 @@ function Dashboard() {
           <div className="container-fluid d-flex justify-content-between align-items-center pt-3 pb-3">
             <div className="left d-flex">
               <div className="date me-4">
-                <h3>{date}</h3>
+                <h3>{formatAsDate(date)}</h3>
               </div>
               <div className="day-toggles d-flex">
                 <button
