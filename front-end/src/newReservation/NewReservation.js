@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-
+import { today, time } from "../utils/date-time";
+import { hours } from "../utils/opening-hours";
 const NewReservation = () => {
   const initReservation = {
     first_name: "",
@@ -15,8 +16,10 @@ const NewReservation = () => {
 
   const [reservation, setReservation] = useState(initReservation);
   const [reservationError, setReservationError] = useState(null);
+  const [currentDay, setCurrentDay] = useState(today());
+  const [currentTime, setCurrentTime] = useState(time());
   const history = useHistory();
-
+  console.log(currentDay, currentTime);
   const handleChange = ({ target }) => {
     const { id } = target;
     // Ensure that the data type is a number
@@ -42,6 +45,10 @@ const NewReservation = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const { reservation_date = "", reservation_time = "" } = reservation;
+    if (reservation_time.localeCompare(hours.open) > 0) {
+      console.log(reservation_time, " after ", hours.open);
+    }
     try {
       const response = await createReservation(reservation);
       setReservation(initReservation);
