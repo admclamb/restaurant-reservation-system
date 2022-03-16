@@ -19,10 +19,18 @@ const NewReservation = () => {
 
   const handleChange = ({ target }) => {
     const { id } = target;
-    setReservation({
-      ...reservation,
-      [id]: target.value,
-    });
+    // Ensure that the data type is a number
+    if (target.type === "number") {
+      setReservation({
+        ...reservation,
+        [id]: Number(target.value),
+      });
+    } else {
+      setReservation({
+        ...reservation,
+        [id]: target.value,
+      });
+    }
     return;
   };
 
@@ -105,7 +113,7 @@ const NewReservation = () => {
             name="reservation_date"
             id="reservation_date"
             className="form-control"
-            placeholder="Reservation date"
+            placeholder="Reservation Date"
             aria-describedby="date"
             value={reservation.reservation_date}
             onChange={handleChange}

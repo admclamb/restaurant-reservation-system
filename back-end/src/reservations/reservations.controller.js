@@ -17,9 +17,9 @@ const validation = {
     const pattern = /\S+/;
     return pattern.test(str); //returns boolean value
   },
-  isNumber: function (str) {
+  isNumber: function (value) {
     const pattern = /^\d+$/;
-    return pattern.test(str); //returns boolean value
+    return pattern.test(value) && typeof value === "number"; //returns boolean value
   },
   isDate: function (str) {
     const pattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
@@ -51,22 +51,13 @@ function hasOnlyValidProperties(req, res, next) {
 function validatePeople(req, res, next) {
   const { data = {} } = req.body;
   const { people = null } = data;
-  console.log(people);
-  console.log(isNaN(people));
-  if (isNaN(people)) {
-    return next({
-      status: 400,
-      message: "people",
-    });
+  if (people > 0 && validation.isNumber(people)) {
+    return next();
   }
-  if (Number(people) <= 0) {
-    return next({
-      status: 400,
-      message: "people",
-    });
-  }
-
-  next();
+  next({
+    status: 400,
+    message: "people",
+  });
 }
 
 function validateTime(req, res, next) {
@@ -95,21 +86,17 @@ function validateDate(req, res, next) {
 
 async function list(req, res) {
   const { date = "" } = req.query;
-  console.log(date);
   const data = date ? await service.listByDate(date) : await service.list();
-  console.log(data);
   const sortedData = data.sort((firstEl, secEl) => {
     return firstEl.reservation_time.localeCompare(secEl.reservation_time);
   });
-  console.log(sortedData);
-  res.status(201).json({ data: sortedData });
+  res.status(200).json({ data: sortedData });
 }
 
 async function create(req, res) {
   const { data = {} } = req.body;
   const reservation = data;
   const createdReservation = await service.create(reservation);
-  console.log("createdReservation", createdReservation);
   res.status(201).json({ data: createdReservation });
 }
 module.exports = {
