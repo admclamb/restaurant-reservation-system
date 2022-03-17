@@ -50,6 +50,26 @@ export function today() {
 }
 
 /**
+ * @param date as YYYY-MM-DD.
+ * @returns day of the week
+ */
+export function getDayOfWeek(date) {
+  const dayOfWeek = new Date(date).getDay();
+  console.log(dayOfWeek);
+  return isNaN(dayOfWeek)
+    ? null
+    : [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ][dayOfWeek + 1];
+}
+
+/**
  * @returns {*}
  * the current time format in HH:MM
  */
