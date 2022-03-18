@@ -55,7 +55,6 @@ export function today() {
  */
 export function getDayOfWeek(date) {
   const dayOfWeek = new Date(date).getDay();
-  console.log(dayOfWeek);
   return isNaN(dayOfWeek)
     ? null
     : [
@@ -67,6 +66,25 @@ export function getDayOfWeek(date) {
         "Friday",
         "Saturday",
       ][dayOfWeek + 1];
+}
+
+/**
+ * @params 1st date string and 2nd date string in format YYYY-MM-DD
+ * checks if first param date is before second param date
+ * @returns true or false
+ */
+export function dateIsBeforeOtherDate(date1, date2) {
+  const date1Els = date1.split("-");
+  const date2Els = date2.split("-");
+  for (let i = 0; i < date1Els.length; i++) {
+    if (+date1Els[i] < +date2Els[i]) {
+      return true;
+    }
+    if (+date1Els[i] > +date2Els[i]) {
+      return false;
+    }
+  }
+  return null;
 }
 
 /**

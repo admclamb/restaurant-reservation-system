@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { today, time, getDayOfWeek } from "../utils/date-time";
+import {
+  today,
+  time,
+  getDayOfWeek,
+  dateIsBeforeOtherDate,
+} from "../utils/date-time";
 import { hours } from "../utils/opening-hours";
 import { OPENING_HOURS } from "../utils/opening-hours";
 const NewReservation = () => {
@@ -20,7 +25,6 @@ const NewReservation = () => {
   const [currentDay, setCurrentDay] = useState(today());
   const [currentTime, setCurrentTime] = useState(time());
   const history = useHistory();
-  console.log(currentDay, currentTime);
   const handleChange = ({ target }) => {
     const { id } = target;
     // Ensure that the data type is a number
@@ -46,10 +50,18 @@ const NewReservation = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const { reservation_date = "", reservation_time = "" } = reservation;
+    const { reservation_date, reservation_time } = reservation;
+    const dateIsBeforeToday = dateIsBeforeOtherDate(
+      reservation.reservation_date,
+      today()
+    );
+    if (dateIsBeforeToday) {
+      setReservationError({ message: "This date is before today" });
+      return;
+    }
     const dayOfWeek = getDayOfWeek(reservation_date);
     if (!OPENING_HOURS.storeIsOpen(dayOfWeek.toLowerCase().substring(0, 3))) {
-      setReservation({ message: "The store is not open on that day" });
+      setReservationError({ message: "The store is not open on that day" });
       return;
     }
     try {
@@ -61,7 +73,6 @@ const NewReservation = () => {
       console.log(error);
     }
   };
-  console.log(reservationError);
   return (
     <main className="container pt-3 mb-5">
       <h1>New Reservation</h1>
