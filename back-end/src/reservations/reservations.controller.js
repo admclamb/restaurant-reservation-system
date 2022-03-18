@@ -84,6 +84,14 @@ function validateDate(req, res, next) {
   });
 }
 
+function dateIsNotBeforeToday(req, res, next) {
+  next();
+}
+
+function storeIsOpen(req, res, next) {
+  next();
+}
+
 async function list(req, res) {
   const { date = "" } = req.query;
   const data = date ? await service.listByDate(date) : await service.list();
@@ -105,6 +113,8 @@ module.exports = {
     hasOnlyValidProperties,
     hasRequiredProperties,
     validateDate,
+    storeIsOpen,
+    dateIsNotBeforeToday,
     validateTime,
     validatePeople,
     asyncErrorBoundary(create),

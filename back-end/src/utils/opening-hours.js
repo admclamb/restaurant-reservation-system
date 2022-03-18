@@ -2,7 +2,7 @@ export const OPENING_HOURS = {
   mon: {
     isOpen: true,
   },
-  tues: {
+  tue: {
     isOpen: false,
   },
   wed: {
@@ -19,5 +19,8 @@ export const OPENING_HOURS = {
   },
   sun: {
     isOpen: true,
+  },
+  storeIsOpen: function (day) {
+    return this[day].isOpen;
   },
 };
