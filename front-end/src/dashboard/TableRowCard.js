@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { formatAsDate, formatAsTime } from "../utils/date-time";
 
 const TableRowCard = ({ reservation }) => {
@@ -8,6 +9,7 @@ const TableRowCard = ({ reservation }) => {
     mobile_number,
     reservation_time,
     reservation_date,
+    reservation_id,
   } = reservation;
 
   return (
@@ -18,6 +20,14 @@ const TableRowCard = ({ reservation }) => {
       <td>{mobile_number}</td>
       <td>{formatAsTime(reservation_time)}</td>
       <td>{formatAsDate(reservation_date)}</td>
+      <td>
+        <Link
+          to={`/reservations/${reservation_id}/seat`}
+          className="btn btn-success"
+        >
+          Seat
+        </Link>
+      </td>
     </tr>
   );
 };

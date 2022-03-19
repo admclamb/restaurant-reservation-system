@@ -17,7 +17,7 @@ const NewReservation = () => {
     mobile_number: "",
     reservation_date: "",
     reservation_time: "",
-    people: 0,
+    people: 1,
   };
 
   const [reservation, setReservation] = useState(initReservation);
@@ -47,7 +47,6 @@ const NewReservation = () => {
     history.push("/");
     return;
   };
-  console.log(reservation.reservation_time);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

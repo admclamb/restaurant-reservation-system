@@ -3,8 +3,8 @@ import { listReservations } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import "./Dashboard.css";
 import ChangeDate from "./ChangeDate";
-
 import ReservationsTable from "./ReservationsTable";
+import Tables from "./tables/Tables";
 import { today, next, previous, formatAsDate } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 /**
@@ -82,6 +82,9 @@ function Dashboard() {
         </nav>
         <ErrorAlert error={reservationsError} />
         <ReservationsTable reservations={reservations} />
+        <div className="mt-5">
+          <Tables />
+        </div>
       </main>
     </>
   );
