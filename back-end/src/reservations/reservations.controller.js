@@ -1,6 +1,13 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
+const OPENING_HOURS = require("../utils/opening-hours");
+const {
+  getDayOfWeek,
+  today,
+  time,
+  dateIsBeforeOtherDate,
+} = require("../utils/date-time");
 
 const VALID_PROPERTIES = [
   "first_name",
@@ -72,10 +79,35 @@ function validateTime(req, res, next) {
   next();
 }
 
+function validateReservationTime(req, res, next) {
+  const { data = {} } = res.locals;
+  const { reservation_time = null } = data;
+  const { reservation_date = null } = data;
+  const day = getDayOfWeek(reservation_date);
+  const opening = OPENING_HOURS[day.toLowerCase().substring(0, 3)].open;
+  const lastCall = OPENING_HOURS[day.toLowerCase().substring(0, 3)].lastCall;
+  // Check if rservation is during opening hours and before last call
+  if (!(time > opening && time < lastCall)) {
+    return next({
+      status: 400,
+      message: "not open",
+    });
+  }
+  // Check if reservation is today and if so if its later than current time
+  if (reservation_date === today() && reservation_time < time()) {
+    return next({
+      status: 400,
+      message: "The reservation is before the current time of today.",
+    });
+  }
+  next();
+}
+
 function validateDate(req, res, next) {
   const { data = {} } = req.body;
   const { reservation_date = null } = data;
   if (validation.isDate(reservation_date)) {
+    res.locals.data = data;
     return next();
   }
   next({
@@ -85,11 +117,29 @@ function validateDate(req, res, next) {
 }
 
 function dateIsNotBeforeToday(req, res, next) {
-  next();
+  const { data = {} } = res.locals;
+  const { reservation_date } = data;
+  if (!dateIsBeforeOtherDate(reservation_date, today())) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: "future",
+  });
 }
 
 function storeIsOpen(req, res, next) {
-  next();
+  const { data = {} } = res.locals;
+  const { reservation_date } = data;
+  const dayOfWeek = getDayOfWeek(reservation_date);
+  console.log(OPENING_HOURS);
+  if (OPENING_HOURS.storeIsOpen(dayOfWeek.toLowerCase().substring(0, 3))) {
+    return next();
+  }
+  next({
+    status: 400,
+    message: "closed",
+  });
 }
 
 async function list(req, res) {
@@ -112,6 +162,7 @@ module.exports = {
   create: [
     hasOnlyValidProperties,
     hasRequiredProperties,
+    validateReservationTime,
     validateDate,
     storeIsOpen,
     dateIsNotBeforeToday,

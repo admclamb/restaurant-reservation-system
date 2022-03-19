@@ -47,20 +47,41 @@ const NewReservation = () => {
     history.push("/");
     return;
   };
+  console.log(reservation.reservation_time);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const { reservation_date, reservation_time } = reservation;
+    const { reservation_date = "", reservation_time = "" } = reservation;
     const dateIsBeforeToday = dateIsBeforeOtherDate(
       reservation.reservation_date,
       today()
     );
-    if (dateIsBeforeToday) {
-      setReservationError({ message: "This date is before today" });
+
+    const day = getDayOfWeek(reservation_date);
+    const opening = OPENING_HOURS[day.toLowerCase().substring(0, 3)].open;
+    const lastCall = OPENING_HOURS[day.toLowerCase().substring(0, 3)].lastCall;
+
+    // Check if reservation is during opening hours and before last call
+    if (!(reservation_time > opening && reservation_time < lastCall)) {
+      setReservationError({
+        message: `The store opens ${day} at ${opening} and last call is ${lastCall}.`,
+      });
       return;
     }
-    const dayOfWeek = getDayOfWeek(reservation_date);
-    if (!OPENING_HOURS.storeIsOpen(dayOfWeek.toLowerCase().substring(0, 3))) {
+    // Check if reservation is today and if so if its later than current time
+    if (reservation_date === today() && reservation_time < time()) {
+      setReservationError({
+        message: "The reservation is before the current time of today.",
+      });
+    }
+
+    // if date is before tdoay
+    if (dateIsBeforeToday) {
+      setReservationError({ message: "This date is set before today." });
+      return;
+    }
+    //lowercase string first three letters such as mon, tue, wed, etc.
+    if (!OPENING_HOURS.storeIsOpen(day.toLowerCase().substring(0, 3))) {
       setReservationError({ message: "The store is not open on that day" });
       return;
     }
