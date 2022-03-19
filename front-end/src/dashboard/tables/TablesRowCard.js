@@ -3,7 +3,7 @@ const TableRowCard = () => {
     <tr>
       <th scope="row"></th>
       <th scope="row"></th>
-      <th scope="row" data-table-id-status={/* table.table_id */}></th>
+      {/* <th scope="row" data-table-id-status=table.table_id></th> */}
     </tr>
   );
 };
