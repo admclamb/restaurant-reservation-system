@@ -84,10 +84,12 @@ function validateReservationTime(req, res, next) {
   const { reservation_time = null } = data;
   const { reservation_date = null } = data;
   const day = getDayOfWeek(reservation_date);
+
+  // Get opening and last call hours based on the day
   const opening = OPENING_HOURS[day.toLowerCase().substring(0, 3)].open;
   const lastCall = OPENING_HOURS[day.toLowerCase().substring(0, 3)].lastCall;
   // Check if rservation is during opening hours and before last call
-  if (!(time > opening && time < lastCall)) {
+  if (!(reservation_time > opening && reservation_time < lastCall)) {
     return next({
       status: 400,
       message: "not open",
@@ -162,12 +164,12 @@ module.exports = {
   create: [
     hasOnlyValidProperties,
     hasRequiredProperties,
-    validateReservationTime,
     validateDate,
     storeIsOpen,
     dateIsNotBeforeToday,
     validateTime,
     validatePeople,
+    validateReservationTime,
     asyncErrorBoundary(create),
   ],
 };
