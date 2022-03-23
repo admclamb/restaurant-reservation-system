@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import "./Dashboard.css";
 import ChangeDate from "./ChangeDate";
@@ -16,6 +16,8 @@ import useQuery from "../utils/useQuery";
 function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
   const [date, setDate] = useState(today());
   const query = useQuery();
 
@@ -25,13 +27,26 @@ function Dashboard() {
       setDate(queryDate);
     }
   }, []);
-  useEffect(loadDashboard, [date]);
+  useEffect(() => {
+    loadDashboard();
+    loadTables();
+  }, [date]);
+
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+    return () => abortController.abort();
+  }
+
+  function loadTables() {
+    const abortController = new AbortController();
+    setTablesError(null);
+    listTables({ date }, abortController.signal)
+      .then(setTables)
+      .catch(setTablesError);
     return () => abortController.abort();
   }
   return (
