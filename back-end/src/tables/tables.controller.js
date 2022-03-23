@@ -3,9 +3,12 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 
 async function list(req, res) {
-  const data = await service.list();
-  const sortedData = data.sort();
-  res.status(200).json({ data: sortedData });
+  const tables = await service.list();
+  // Sort tables in one line
+  const sortedTables = tables.sort((a, b) =>
+    a.table_name > b.table_name ? 1 : b.table_name > a.table_name ? -1 : 0
+  );
+  res.status(200).json({ data: sortedTables });
 }
 const VALID_PROPERTIES = ["table_name", "capacity"];
 
@@ -28,14 +31,11 @@ function hasOnlyValidProperties(req, res, next) {
 
 function validateTableName(req, res, next) {
   const { data = {} } = req.body;
-  const { table_name = "" } = req.body;
+  const { table_name = "" } = data;
   if (table_name.length > 1) {
     return next();
   }
-  next({
-    status: 400,
-    message: "table_name",
-  });
+  next({ status: 400, message: "table_name" });
 }
 
 function validateCapacity(req, res, next) {
@@ -59,7 +59,6 @@ function validateCapacity(req, res, next) {
       message: "capacity",
     });
   }
-  console.log("here");
   next();
 }
 
@@ -71,17 +70,13 @@ async function create(req, res) {
 }
 
 async function tableExists(req, res, next) {
-  const { data = {} } = req.body;
-  const { table_name = "" } = data;
-  const foundTable = await service.read(table_name);
-  if (foundTable) {
-    res.locals.table = foundTable;
+  const { table_id } = req.params;
+  const table = await service.read(table_id);
+  if (table) {
+    res.locals.table = table;
     return next();
   }
-  next({
-    status: 404,
-    messag: "Table not found",
-  });
+  next({ status: 404, message: table_id });
 }
 
 async function read(req, res) {

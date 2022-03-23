@@ -134,7 +134,6 @@ function storeIsOpen(req, res, next) {
   const { data = {} } = res.locals;
   const { reservation_date } = data;
   const dayOfWeek = getDayOfWeek(reservation_date);
-  console.log(OPENING_HOURS);
   if (OPENING_HOURS.storeIsOpen(dayOfWeek.toLowerCase().substring(0, 3))) {
     return next();
   }
@@ -159,6 +158,21 @@ async function create(req, res) {
   const createdReservation = await service.create(reservation);
   res.status(201).json({ data: createdReservation });
 }
+
+async function reservationExist(req, res, next) {
+  const { reservation_id } = req.params;
+  const reservation = await service.read(reservation_id);
+  if (reservation) {
+    res.locals.reservation = reservation;
+    return next();
+  }
+  next({ status: 400, message: "reservation_id" });
+}
+
+async function read(req, res, next) {
+  const { reservation } = res.locals;
+  res.status(200).json({ data: reservation });
+}
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -172,4 +186,5 @@ module.exports = {
     validateReservationTime,
     asyncErrorBoundary(create),
   ],
+  read: [asyncErrorBoundary(reservationExist), asyncErrorBoundary(read)],
 };

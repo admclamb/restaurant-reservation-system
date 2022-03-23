@@ -11,8 +11,8 @@ function create(reservation) {
     .then((data) => data[0]);
 }
 
-function read(table_name) {
-  return knex("tables").select("*").where({ table_name });
+function read(table_id) {
+  return knex("tables").select("*").where({ table_id }).first();
 }
 
 module.exports = {
