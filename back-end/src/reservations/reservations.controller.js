@@ -1,6 +1,7 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const hasProperties = require("../errors/hasProperties");
+const hasProperties = require("../utils/has-properties");
+const hasOnlyValidProperties = require("../utils/has-only-valid-properties");
 const OPENING_HOURS = require("../utils/opening-hours");
 const {
   getDayOfWeek,
@@ -39,22 +40,7 @@ const validation = {
 };
 
 const hasRequiredProperties = hasProperties(...VALID_PROPERTIES);
-
-function hasOnlyValidProperties(req, res, next) {
-  const { data = {} } = req.body;
-  const invalidFields = Object.keys(data).filter(
-    (field) => !VALID_PROPERTIES.includes(field)
-  );
-
-  if (invalidFields.length) {
-    return next({
-      status: 400,
-      message: `Invalid field(s): ${invalidFields.join(", ")}`,
-    });
-  }
-  next();
-}
-
+const has_only_valid_properties = hasOnlyValidProperties(...VALID_PROPERTIES);
 function validatePeople(req, res, next) {
   const { data = {} } = req.body;
   const { people = null } = data;
@@ -154,19 +140,19 @@ async function list(req, res) {
 
 async function create(req, res) {
   const { data = {} } = req.body;
-  const reservation = data;
-  const createdReservation = await service.create(reservation);
+  const createdReservation = await service.create(data);
   res.status(201).json({ data: createdReservation });
 }
 
 async function reservationExist(req, res, next) {
   const { reservation_id } = req.params;
   const reservation = await service.read(reservation_id);
+
   if (reservation) {
     res.locals.reservation = reservation;
     return next();
   }
-  next({ status: 400, message: "reservation_id" });
+  next({ status: 404, message: reservation_id });
 }
 
 async function read(req, res, next) {
@@ -176,7 +162,7 @@ async function read(req, res, next) {
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
-    hasOnlyValidProperties,
+    has_only_valid_properties,
     hasRequiredProperties,
     validateDate,
     storeIsOpen,
