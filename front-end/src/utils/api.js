@@ -67,16 +67,18 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
-export async function listTables(params, signal) {
+export async function listTables(signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
-  Object.entries(params).forEach(([key, value]) =>
-    url.searchParams.append(key, value.toString())
-  );
   return await fetchJson(url, { headers, signal }, []);
 }
 
-export async function readReservation(data, signal) {
-  const url = new URL(`${API_BASE_URL}/${data.reservation_id}`);
+export async function readReservation(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/${reservation_id}`);
+  return await fetchJson(url, { signal }, []);
+}
+
+export async function readTable(table_id, signal) {
+  const url = new URL(`${API_BASE_URL}/${table_id}`);
   return await fetchJson(url, { signal }, []);
 }
 
@@ -87,6 +89,26 @@ export async function createReservation(data, signal) {
   return await fetchJson(
     url,
     { headers, body: JSON.stringify(body), method, signal },
+    []
+  );
+}
+
+/**
+ *
+ * @param data is an object with reservation_id and table_id
+ * and then is formatted to the request as data: { reservation_id }
+ * This was used to access the table in the server and send the new
+ * reservation
+ */
+
+export async function updateTableSeat(data, signal) {
+  const { table_id = "", reservation_id = "" } = data;
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  const body = { data: { reservation_id } };
+  const method = "PUT";
+  return await fetchJson(
+    url,
+    { headers, body: JSON.stringify(body), method },
     []
   );
 }

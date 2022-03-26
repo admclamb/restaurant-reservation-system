@@ -121,6 +121,7 @@ async function read(req, res) {
 }
 
 async function update(req, res, next) {
+  console.log("updating", req.body.data);
   try {
     const updatedTable = {
       ...res.locals.table,
