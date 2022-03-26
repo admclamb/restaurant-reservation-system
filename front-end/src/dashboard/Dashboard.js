@@ -27,10 +27,8 @@ function Dashboard() {
       setDate(queryDate);
     }
   }, []);
-  useEffect(() => {
-    loadDashboard();
-    loadTables();
-  }, [date]);
+
+  useEffect(() => loadDashboard(), [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -38,12 +36,6 @@ function Dashboard() {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
-    return () => abortController.abort();
-  }
-
-  function loadTables() {
-    const abortController = new AbortController();
-    setTablesError(null);
     listTables({ date }, abortController.signal)
       .then(setTables)
       .catch(setTablesError);
@@ -98,7 +90,7 @@ function Dashboard() {
         <ErrorAlert error={reservationsError} />
         <ReservationsTable reservations={reservations} />
         <div className="mt-5">
-          <Tables />
+          <Tables tables={tables} />
         </div>
       </main>
     </>

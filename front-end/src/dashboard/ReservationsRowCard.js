@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 import { formatAsDate, formatAsTime } from "../utils/date-time";
 
-const TableRowCard = ({ reservation }) => {
+const ReservationsRowCard = ({ reservation }) => {
+  if (!reservation) return null;
   const {
     people,
     first_name,
@@ -14,7 +15,7 @@ const TableRowCard = ({ reservation }) => {
 
   return (
     <tr>
-      <th scope="row">{people}</th>
+      <td scope="row">{people}</td>
       <td>{first_name}</td>
       <td>{last_name}</td>
       <td>{mobile_number}</td>
@@ -31,4 +32,4 @@ const TableRowCard = ({ reservation }) => {
     </tr>
   );
 };
-export default TableRowCard;
+export default ReservationsRowCard;

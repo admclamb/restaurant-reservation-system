@@ -1,6 +1,6 @@
 import TablesTableRows from "./TablesTableRows";
 
-const Tables = () => {
+const Tables = ({ tables }) => {
   return (
     <table className="table container-fluid">
       <thead>
@@ -11,7 +11,7 @@ const Tables = () => {
         </tr>
       </thead>
       <tbody>
-        <TablesTableRows />
+        <TablesTableRows tables={tables} />
       </tbody>
     </table>
   );

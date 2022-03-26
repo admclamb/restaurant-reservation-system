@@ -1,9 +1,9 @@
-import TableRowCard from "./TableRowCard";
+import ReservationsRowCard from "./ReservationsRowCard";
 
 const ReservationsTableRows = ({ reservations }) => {
   if (Array.isArray(reservations) && reservations.length > 0) {
     const tableRowData = reservations.map((reservation, index) => {
-      return <TableRowCard key={index} reservation={reservation} />;
+      return <ReservationsRowCard key={index} reservation={reservation} />;
     });
 
     return <>{tableRowData}</>;

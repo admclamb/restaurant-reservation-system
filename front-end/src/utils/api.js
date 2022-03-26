@@ -68,13 +68,11 @@ export async function listReservations(params, signal) {
 }
 
 export async function listTables(params, signal) {
-  const url = new URL(`${API_BASE_URL}/reservations`);
+  const url = new URL(`${API_BASE_URL}/tables`);
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
   );
-  return await fetchJson(url, { headers, signal }, [])
-    .then(formatReservationDate)
-    .then(formatReservationTime);
+  return await fetchJson(url, { headers, signal }, []);
 }
 
 export async function createReservation(data, signal) {
