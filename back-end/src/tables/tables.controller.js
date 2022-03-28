@@ -92,13 +92,24 @@ function validateReservationID(req, res, next) {
   next({ status: 400, message: "reservation_id" });
 }
 
-function tableIsOccupied(req, res, next) {
+// Returns error if table is occupied
+function tableIsUnoccupied(req, res, next) {
   const { table = {} } = res.locals;
   if (table.occupied) {
     return next({ status: 400, message: "occupied" });
   }
   next();
 }
+
+// Returns error if table is unoccupied
+function tableIsOccupied(req, res, next) {
+  const { table = {} } = res.locals;
+  if (table.occupied) {
+    return next();
+  }
+  next({ status: 400, message: "not occupied" });
+}
+
 async function list(req, res) {
   const tables = await service.list();
   // Sort tables in one line
@@ -133,6 +144,22 @@ async function update(req, res, next) {
   }
 }
 
+// Called before deleting reservation function
+async function unOccupyTable(req, res, next) {
+  console.log(res.locals.table);
+  try {
+    const updatedTable = {
+      ...res.locals.table,
+      reservation_id: null,
+      occupied: false,
+    };
+    const data = await service.update(updatedTable);
+    next();
+  } catch (error) {
+    next(error);
+  }
+}
+
 // Destorys reservation and updates occupied
 async function destroy(req, res, next) {
   const { table } = res.locals;
@@ -157,12 +184,13 @@ module.exports = {
     validateReservationID,
     asyncErrorBoundary(reservationExist),
     asyncErrorBoundary(hasSufficientCapacity),
-    tableIsOccupied,
+    tableIsUnoccupied,
     asyncErrorBoundary(update),
   ],
   destroy: [
     asyncErrorBoundary(tableExists),
-    asyncErrorBoundary(update),
+    tableIsOccupied,
+    asyncErrorBoundary(unOccupyTable),
     asyncErrorBoundary(destroy),
   ],
 };

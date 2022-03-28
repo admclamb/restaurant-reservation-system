@@ -27,8 +27,8 @@ function update(updatedTable) {
     .update(updatedTable, "*");
 }
 
-function destroyReservation(reservatin_id) {
-  return knex("reservations").where({ reservatin_id }).del();
+function destroyReservation(reservation_id) {
+  return knex("reservations").where({ reservation_id }).del();
 }
 
 module.exports = {
