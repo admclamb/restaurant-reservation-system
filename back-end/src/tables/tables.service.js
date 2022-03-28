@@ -27,10 +27,15 @@ function update(updatedTable) {
     .update(updatedTable, "*");
 }
 
+function destroyReservation(reservatin_id) {
+  return knex("reservations").where({ reservatin_id }).del();
+}
+
 module.exports = {
   list,
   create,
   read,
   readReservationID,
   update,
+  destroyReservation,
 };

@@ -133,6 +133,14 @@ async function update(req, res, next) {
   }
 }
 
+// Destorys reservation and updates occupied
+async function destroy(req, res, next) {
+  const { table } = res.locals;
+  const { reservation_id = "" } = table;
+  const deletedReservation = await service.destroyReservation(reservation_id);
+  res.status(200).json({ data: deletedReservation });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -151,5 +159,10 @@ module.exports = {
     asyncErrorBoundary(hasSufficientCapacity),
     tableIsOccupied,
     asyncErrorBoundary(update),
+  ],
+  destroy: [
+    asyncErrorBoundary(tableExists),
+    asyncErrorBoundary(update),
+    asyncErrorBoundary(destroy),
   ],
 };
