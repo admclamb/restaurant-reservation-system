@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import TableOption from "./TableOption";
 import { updateTableSeat } from "../utils/api";
+import ErrorAlert from "../layout/ErrorAlert";
 const SeatForm = ({ tables }) => {
   const history = useHistory();
   const { reservation_id } = useParams();
   const [table_id, setTable_id] = useState("");
-
+  const [tableError, setTableError] = useState(null);
   // Check if tables is iterable or not
   if (
     (Array.isArray(tables) && tables.length === 0) ||
@@ -21,9 +22,15 @@ const SeatForm = ({ tables }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const abortController = new AbortController();
-    const data = { reservation_id, table_id };
-    updateTableSeat(data, abortController.signal).then(console.log);
+    try {
+      const abortController = new AbortController();
+      const data = { reservation_id, table_id };
+      const response = await updateTableSeat(data, abortController.signal);
+      console.log(response);
+      history.push("/");
+    } catch (error) {
+      setTableError(error);
+    }
   };
 
   const tablesOptions = tables.map((table, index) => {
@@ -31,6 +38,7 @@ const SeatForm = ({ tables }) => {
   });
   return (
     <form onSubmit={handleSubmit} id="seating-form">
+      <ErrorAlert error={tableError} />
       <label htmlFor="table-select">Select Table</label>
       <select
         className="form-select"

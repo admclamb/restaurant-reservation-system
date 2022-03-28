@@ -90,7 +90,6 @@ const NewReservation = () => {
       history.push(`/dashboard?date=${reservation.reservation_date}`);
     } catch (error) {
       setReservationError(error);
-      console.log(error);
     }
   };
   return (

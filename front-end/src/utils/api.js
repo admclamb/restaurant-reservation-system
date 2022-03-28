@@ -103,8 +103,6 @@ export async function createReservation(data, signal) {
 
 export async function updateTableSeat(data, signal) {
   const { table_id, reservation_id } = data;
-  console.log(data);
-  console.log(data.table_id);
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   const body = { data: { reservation_id } };
   const method = "PUT";
