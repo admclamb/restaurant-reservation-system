@@ -1,7 +1,6 @@
 import TablesRowCard from "./TablesRowCard";
 
 const TablesTableRows = ({ tables }) => {
-  console.log(tables);
   if (Array.isArray(tables) && tables.length > 0) {
     const tableRowData = tables.map((table, index) => {
       return <TablesRowCard table={table} key={index} />;

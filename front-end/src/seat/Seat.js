@@ -6,22 +6,13 @@ import SeatForm from "./SeatForm";
 
 const Seat = () => {
   const [tables, setTables] = useState([]);
-  const [table, setTable] = useState({});
   const [seatError, setSeatError] = useState(null);
-  const { reservation_id } = useParams();
 
   useEffect(() => {
     setTables([]);
     const abortController = new AbortController();
     listTables(abortController.signal).then(setTables).catch(setSeatError);
   }, []);
-
-  useEffect(() => {
-    const abortController = new AbortController();
-    const { table_id = "" } = table;
-    const data = { reservation_id, table_id };
-    updateTableSeat({ data }, abortController.signal).then(console.log);
-  }, [table]);
 
   return (
     <>
@@ -30,7 +21,7 @@ const Seat = () => {
       </header>
       <main className="seat container">
         <ErrorAlert error={seatError} />
-        <SeatForm tables={tables} setTable={setTable} />
+        <SeatForm tables={tables} />
       </main>
     </>
   );

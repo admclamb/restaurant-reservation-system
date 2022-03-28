@@ -1,6 +1,6 @@
 const TableOption = ({ table }) => {
   return (
-    <option value={table.table_id}>
+    <option name="table_id" value={table.table_id}>
       {table.table_name} - {table.capacity}
     </option>
   );

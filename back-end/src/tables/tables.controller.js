@@ -94,7 +94,6 @@ function validateReservationID(req, res, next) {
 
 function tableIsOccupied(req, res, next) {
   const { table = {} } = res.locals;
-  console.log(table.occupied);
   if (table.occupied) {
     return next({ status: 400, message: "occupied" });
   }
@@ -121,7 +120,6 @@ async function read(req, res) {
 }
 
 async function update(req, res, next) {
-  console.log("updating", req.body.data);
   try {
     const updatedTable = {
       ...res.locals.table,

@@ -90,6 +90,7 @@ function Dashboard() {
         <ErrorAlert error={reservationsError} />
         <ReservationsTable reservations={reservations} />
         <div className="mt-5">
+          <ErrorAlert error={tablesError} />
           <Tables tables={tables} />
         </div>
       </main>
