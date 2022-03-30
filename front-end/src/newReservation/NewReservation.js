@@ -18,6 +18,7 @@ const NewReservation = () => {
     reservation_date: "",
     reservation_time: "",
     people: 1,
+    status: "booked",
   };
 
   const [reservation, setReservation] = useState(initReservation);

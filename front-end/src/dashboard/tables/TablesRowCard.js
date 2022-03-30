@@ -9,10 +9,12 @@ const TablesRowCard = ({ table, handleFinishTable, setCurrTable_id }) => {
       </td>
       <td>
         {/* button trigger for finish modal */}
+        {/**
+         * onClick sends to modal for confirming then to handleFinishTable in dashboard
+         */}
         <button
           className="btn btn-success"
           data-table-id-finish={table.table_id}
-          // onClick={handleFinishTable}
           data-bs-toggle="modal"
           data-bs-target="#staticBackdrop"
           onClick={() => setCurrTable_id(table.table_id)}

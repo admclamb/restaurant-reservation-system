@@ -63,7 +63,11 @@ async function tableExists(req, res, next) {
 }
 
 async function reservationExist(req, res, next) {
-  const { reservation_id = "" } = req.body.data;
+  let { reservation_id = null } = req.body.data;
+  if (!reservation_id) {
+    reservation_id = res.locals.table.reservation_id;
+  }
+  console.log(reservation_id);
   const reservation = await service.readReservationID(reservation_id);
   if (reservation) {
     res.locals.reservation = reservation;
@@ -174,6 +178,7 @@ async function destroy(req, res, next) {
     status: "finished",
   };
   const data = await service.updateSeatTable(updatedTable, updatedReservation);
+
   res.sendStatus(200);
 }
 
