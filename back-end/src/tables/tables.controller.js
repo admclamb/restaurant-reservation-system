@@ -69,6 +69,7 @@ async function reservationExist(req, res, next) {
     res.locals.reservation = reservation;
     return next();
   }
+  // make string rather than INT for consistency
   next({ status: 404, message: reservation_id + "" });
 }
 
@@ -131,41 +132,49 @@ async function read(req, res) {
 }
 
 async function update(req, res, next) {
+  // Seats reservation: updates reservation status and updates table
   try {
     const updatedTable = {
       ...res.locals.table,
       reservation_id: req.body.data.reservation_id,
       occupied: true,
     };
-    const data = await service.update(updatedTable);
+    const updatedReservation = {
+      ...res.locals.reservation,
+      status: "seated",
+    };
+    const data = await service.updateSeatTable(
+      updatedTable,
+      updatedReservation
+    );
     res.status(200).json({ data });
   } catch (error) {
     next(error);
   }
 }
 
-// Called before deleting reservation function
-async function unOccupyTable(req, res, next) {
-  console.log(res.locals.table);
-  try {
-    const updatedTable = {
-      ...res.locals.table,
-      reservation_id: null,
-      occupied: false,
-    };
-    const data = await service.update(updatedTable);
-    next();
-  } catch (error) {
-    next(error);
+// Checks if reservation is seated
+async function reservationIsSeated(req, res, next) {
+  const { status } = res.locals.reservation;
+  if (status === "seated") {
+    return next({ status: 400, message: "seated" });
   }
+  next();
 }
 
-// Destorys reservation and updates occupied
+// updates reservation to finished and updates occupied table
 async function destroy(req, res, next) {
-  const { table } = res.locals;
-  const { reservation_id = "" } = table;
-  const deletedReservation = await service.destroyReservation(reservation_id);
-  res.status(200).json({ data: deletedReservation });
+  const updatedTable = {
+    ...res.locals.table,
+    reservation_id: null,
+    occupied: false,
+  };
+  const updatedReservation = {
+    ...res.locals.reservation,
+    status: "finished",
+  };
+  const data = await service.updateSeatTable(updatedTable, updatedReservation);
+  res.sendStatus(200);
 }
 
 module.exports = {
@@ -183,6 +192,7 @@ module.exports = {
     validateDataProperty,
     validateReservationID,
     asyncErrorBoundary(reservationExist),
+    reservationIsSeated,
     asyncErrorBoundary(hasSufficientCapacity),
     tableIsUnoccupied,
     asyncErrorBoundary(update),
@@ -190,7 +200,7 @@ module.exports = {
   destroy: [
     asyncErrorBoundary(tableExists),
     tableIsOccupied,
-    asyncErrorBoundary(unOccupyTable),
+    asyncErrorBoundary(reservationExist),
     asyncErrorBoundary(destroy),
   ],
 };

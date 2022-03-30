@@ -18,6 +18,7 @@ const ReservationsTableRows = ({ reservations }) => {
       <td></td>
       <td></td>
       <td></td>
+      <td></td>
     </tr>
   );
 };

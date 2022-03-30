@@ -11,8 +11,19 @@ const ReservationsRowCard = ({ reservation }) => {
     reservation_time,
     reservation_date,
     reservation_id,
+    status = "booked",
   } = reservation;
 
+  const statusColor = status === "booked" ? "text-success" : "";
+
+  const seatedButton = (
+    <Link
+      to={`/reservations/${reservation_id}/seat`}
+      className="btn btn-success"
+    >
+      Seat
+    </Link>
+  );
   return (
     <tr>
       <td scope="row">{people}</td>
@@ -21,14 +32,13 @@ const ReservationsRowCard = ({ reservation }) => {
       <td>{mobile_number}</td>
       <td>{formatAsTime(reservation_time)}</td>
       <td>{formatAsDate(reservation_date)}</td>
-      <td>
-        <Link
-          to={`/reservations/${reservation_id}/seat`}
-          className="btn btn-success"
-        >
-          Seat
-        </Link>
+      <td
+        className={statusColor}
+        data-reservation-id-status={reservation.reservation_id}
+      >
+        {status}
       </td>
+      <td>{status === "booked" ? seatedButton : null}</td>
     </tr>
   );
 };

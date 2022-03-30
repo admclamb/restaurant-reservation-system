@@ -17,6 +17,7 @@ const VALID_PROPERTIES = [
   "reservation_date",
   "reservation_time",
   "people",
+  "status",
 ];
 
 // Validation object
@@ -91,6 +92,37 @@ function validateReservationTime(req, res, next) {
   next();
 }
 
+function validateStatus(req, res, next) {
+  const { data = {} } = req.body;
+  const { status = null } = data;
+  if (status) {
+    if (status === "booked") {
+      return next();
+    }
+    return next({ status: 400, message: status });
+  }
+  next();
+}
+
+const VALID_STATUS_PROPERTIES = ["booked", "seated", "finished"];
+// Validate update status
+function validateStatusUpdate(req, res, next) {
+  const { status = null } = req.body.data;
+  if (status && VALID_STATUS_PROPERTIES.includes(status)) {
+    return next();
+  }
+  next({ status: 400, message: "unknown" });
+}
+
+// Satus cannot be curretnly finished before updating
+function validateCurrentStatus(req, res, next) {
+  const { status } = res.locals.reservation;
+  if (status === "finished") {
+    return next({ status: 400, message: "finished" });
+  }
+  next();
+}
+
 function validateDate(req, res, next) {
   const { data = {} } = req.body;
   const { reservation_date = null } = data;
@@ -132,7 +164,12 @@ function storeIsOpen(req, res, next) {
 async function list(req, res) {
   const { date = "" } = req.query;
   const data = date ? await service.listByDate(date) : await service.list();
-  const sortedData = data.sort((firstEl, secEl) => {
+  console.log(data);
+  const dataNotFinished = data.filter(
+    (reservation) => reservation.status !== "finished"
+  );
+  console.log(dataNotFinished);
+  const sortedData = dataNotFinished.sort((firstEl, secEl) => {
     return firstEl.reservation_time.localeCompare(secEl.reservation_time);
   });
   res.status(200).json({ data: sortedData });
@@ -159,6 +196,18 @@ async function read(req, res, next) {
   const { reservation } = res.locals;
   res.status(200).json({ data: reservation });
 }
+
+async function updateStatus(req, res, next) {
+  const { reservation } = res.locals;
+  const { status } = req.body.data;
+  const updatedReservation = {
+    ...reservation,
+    status,
+  };
+  const data = await service.update(updatedReservation);
+  res.status(200).json({ data: data });
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -170,7 +219,15 @@ module.exports = {
     validateTime,
     validatePeople,
     validateReservationTime,
+    validateStatus,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExist), asyncErrorBoundary(read)],
+  updateStatus: [
+    asyncErrorBoundary(reservationExist),
+    validateCurrentStatus,
+    validateStatusUpdate,
+
+    asyncErrorBoundary(updateStatus),
+  ],
 };

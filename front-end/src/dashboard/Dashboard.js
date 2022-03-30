@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { listReservations, listTables } from "../utils/api";
+import {
+  finishReservationTable,
+  listReservations,
+  listTables,
+} from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import "./Dashboard.css";
 import ChangeDate from "./ChangeDate";
@@ -7,6 +11,7 @@ import ReservationsTable from "./ReservationsTable";
 import Tables from "./tables/Tables";
 import { today, next, previous, formatAsDate } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
+import StaticBackdropModal from "../utils/StaticBackdropModal";
 /**
  * Defines the dashboard page.
  * @param date
@@ -18,6 +23,7 @@ function Dashboard() {
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
+  const [currTable_id, setCurrTable_id] = useState();
   const [date, setDate] = useState(today());
   const query = useQuery();
 
@@ -41,6 +47,17 @@ function Dashboard() {
       .catch(setTablesError);
     return () => abortController.abort();
   }
+
+  // Update tables and delete reservation when function is called in the tables row button
+  function handleFinishTable() {
+    const abortController = new AbortController();
+    console.log(currTable_id);
+    setTablesError(null);
+    finishReservationTable(currTable_id)
+      .then(loadDashboard)
+      .catch(setTablesError);
+  }
+
   return (
     <>
       <header className="p-2">
@@ -91,7 +108,17 @@ function Dashboard() {
         <ReservationsTable reservations={reservations} />
         <div className="mt-5">
           <ErrorAlert error={tablesError} />
-          <Tables tables={tables} />
+          <Tables
+            tables={tables}
+            handleFinishTable={handleFinishTable}
+            setCurrTable_id={setCurrTable_id}
+          />
+          {/*Handles finishing up a table in the tables table */}
+          <StaticBackdropModal
+            title={"Is this table ready to seat new guest?"}
+            body={"This cannot be undone."}
+            responseFunction={handleFinishTable}
+          />
         </div>
       </main>
     </>

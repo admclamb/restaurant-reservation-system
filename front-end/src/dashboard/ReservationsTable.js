@@ -11,6 +11,7 @@ const ReservationsTable = ({ reservations }) => {
           <th scope="col">Mobile Number</th>
           <th scope="col">Time</th>
           <th scope="col">Date</th>
+          <th scope="col">Status</th>
           <th scope="col">Seat</th>
         </tr>
       </thead>

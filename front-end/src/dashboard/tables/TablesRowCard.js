@@ -1,13 +1,25 @@
-const TablesRowCard = ({ table }) => {
+const TablesRowCard = ({ table, handleFinishTable, setCurrTable_id }) => {
   const { table_name, capacity, occupied } = table;
   return (
     <tr>
       <td scope="row">{table_name}</td>
       <td>{capacity}</td>
-      <th scope="row" data-table-id-status={table.table_id}>
+      <td data-table-id-status={table.table_id}>
         {occupied ? "Occupied" : "Free"}
-      </th>
-      {/* <th scope="row" data-table-id-status=table.table_id></th> */}
+      </td>
+      <td>
+        {/* button trigger for finish modal */}
+        <button
+          className="btn btn-success"
+          data-table-id-finish={table.table_id}
+          // onClick={handleFinishTable}
+          data-bs-toggle="modal"
+          data-bs-target="#staticBackdrop"
+          onClick={() => setCurrTable_id(table.table_id)}
+        >
+          Finished
+        </button>
+      </td>
     </tr>
   );
 };
