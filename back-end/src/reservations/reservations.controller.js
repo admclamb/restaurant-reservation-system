@@ -40,7 +40,16 @@ const validation = {
   },
 };
 
-const hasRequiredProperties = hasProperties(...VALID_PROPERTIES);
+const hasRequiredProperties = hasProperties(
+  ...[
+    "first_name",
+    "last_name",
+    "mobile_number",
+    "reservation_date",
+    "reservation_time",
+    "people",
+  ]
+);
 const has_only_valid_properties = hasOnlyValidProperties(...VALID_PROPERTIES);
 function validatePeople(req, res, next) {
   const { data = {} } = req.body;

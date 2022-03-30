@@ -39,18 +39,23 @@ function update(updatedTable) {
 
 async function updateSeatTable(updatedTable, updatedReservation) {
   try {
+    let updatedTableResponse;
+    let updatedReservationResponse;
     await knex.transaction(async (trx) => {
-      const updatedTableResponse = await knex("tables")
+      updatedTableResponse = await knex("tables")
         .select("*")
         .where({ table_id: updatedTable.table_id })
-        .update(updatedTable, "*");
-      const updatedReservationResponse = await knex("reservations")
+        .update(updatedTable, "*")
+        .then((data) => data[0]);
+      updatedReservationResponse = await knex("reservations")
         .select("*")
         .where({ reservation_id: updatedReservation.reservation_id })
-        .update(updatedReservation, "*");
+        .update(updatedReservation, "*")
+        .then((data) => data[0]);
 
       return { updatedTableResponse, updatedReservationResponse };
     });
+    return { updatedTableResponse, updatedReservationResponse };
   } catch (error) {
     return { error };
   }

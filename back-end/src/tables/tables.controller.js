@@ -55,6 +55,7 @@ async function hasSufficientCapacity(req, res, next) {
 async function tableExists(req, res, next) {
   const { table_id } = req.params;
   const table = await service.read(table_id);
+  console.log(table);
   if (table) {
     res.locals.table = table;
     return next();
@@ -138,6 +139,7 @@ async function read(req, res) {
 async function update(req, res, next) {
   // Seats reservation: updates reservation status and updates table
   try {
+    console.log("before update", res.locals.table, res.locals.reservation);
     const updatedTable = {
       ...res.locals.table,
       reservation_id: req.body.data.reservation_id,
@@ -151,6 +153,7 @@ async function update(req, res, next) {
       updatedTable,
       updatedReservation
     );
+    console.log("updated", data);
     res.status(200).json({ data });
   } catch (error) {
     next(error);
