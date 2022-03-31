@@ -1,14 +1,14 @@
 const knex = require("../db/connection");
 
 function list() {
-  return knex("reservations").select("*");
+  return knex("reservations").select("*").orderBy("reservation_time");
 }
 
 function listByDate(reservation_date) {
   return knex("reservations").select("*").where({ reservation_date });
 }
 
-function listByNumber(mobile_number) {
+function search(mobile_number) {
   return knex("reservations")
     .whereRaw(
       "translate(mobile_number, '() -', '') like ?",
@@ -40,7 +40,7 @@ module.exports = {
   list,
   create,
   listByDate,
-  listByNumber,
+  search,
   read,
   update,
 };
