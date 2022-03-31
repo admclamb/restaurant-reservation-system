@@ -3,6 +3,7 @@ import {
   finishReservationTable,
   listReservations,
   listTables,
+  updateReservationStatus,
 } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
 import "./Dashboard.css";
@@ -12,12 +13,7 @@ import Tables from "./tables/Tables";
 import { today, next, previous, formatAsDate } from "../utils/date-time";
 import useQuery from "../utils/useQuery";
 import StaticBackdropModal from "../utils/StaticBackdropModal";
-/**
- * Defines the dashboard page.
- * @param date
- *  the date for which the user wants to view reservations.
- * @returns {JSX.Element}
- */
+
 function Dashboard() {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
@@ -62,7 +58,13 @@ function Dashboard() {
   }
 
   // Cancels reservation
-  function cancelReservation() {}
+  function cancelReservation() {
+    const abortController = new AbortController();
+    setReservationsError(null);
+    updateReservationStatus(currReservation_id, "cancelled")
+      .then(loadDashboard)
+      .catch(setReservationsError);
+  }
 
   return (
     <>
@@ -111,7 +113,10 @@ function Dashboard() {
           </div>
         </nav>
         <ErrorAlert error={reservationsError} />
-        <ReservationsTable reservations={reservations} />
+        <ReservationsTable
+          reservations={reservations}
+          setCurrReservation_id={setCurrReservation_id}
+        />
         <div className="mt-5">
           <ErrorAlert error={tablesError} />
           <Tables
@@ -129,11 +134,11 @@ function Dashboard() {
             responseFunction={handleFinishTable}
           />
           {/*Handles canceling a reservation */}
-          <StaticBackdropModal 
-            title={"Do you want to cancel this reservation?"} 
-            body={"This cannot be undone."} 
-            id={"cancelOrderModal"} 
-            responseFunction={cancelReservation} 
+          <StaticBackdropModal
+            title={"Do you want to cancel this reservation?"}
+            body={"This cannot be undone."}
+            id={"cancelOrderModal"}
+            responseFunction={cancelReservation}
           />
         </div>
       </main>

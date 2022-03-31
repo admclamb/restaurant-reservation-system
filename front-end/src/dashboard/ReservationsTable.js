@@ -1,6 +1,6 @@
 import ReservationsTableRows from "./ReservationsTableRows";
 
-const ReservationsTable = ({ reservations }) => {
+const ReservationsTable = ({ reservations, setCurrReservation_id }) => {
   return (
     <table className="table container-fluid">
       <thead>
@@ -18,7 +18,10 @@ const ReservationsTable = ({ reservations }) => {
         </tr>
       </thead>
       <tbody>
-        <ReservationsTableRows reservations={reservations} />
+        <ReservationsTableRows
+          reservations={reservations}
+          setCurrReservation_id={setCurrReservation_id}
+        />
       </tbody>
     </table>
   );

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { formatAsDate, formatAsTime } from "../utils/date-time";
 
-const ReservationsRowCard = ({ reservation }) => {
+const ReservationsRowCard = ({ reservation, setCurrReservation_id }) => {
   if (!reservation) return null;
   const {
     people,
@@ -19,7 +19,7 @@ const ReservationsRowCard = ({ reservation }) => {
   const seatedButton = (
     <Link
       to={`/reservations/${reservation_id}/seat`}
-      className="btn btn-success"
+      className={"btn btn-success" + (status !== "booked" ? " disabled" : "")}
     >
       Seat
     </Link>
@@ -28,7 +28,7 @@ const ReservationsRowCard = ({ reservation }) => {
   const editButton = (
     <Link
       to={`/reservations/${reservation_id}/edit`}
-      className="btn btn-success"
+      className={"btn btn-success" + (status !== "booked" ? " disabled" : "")}
     >
       Edit
     </Link>
@@ -36,10 +36,11 @@ const ReservationsRowCard = ({ reservation }) => {
 
   const cancelButton = (
     <button
-      className="btn btn-danger"
+      className={"btn btn-danger" + (status === "cancelled" ? " disabled" : "")}
       data-reservation-id-cancel={reservation.reservation_id}
       data-bs-toggle="modal"
       data-bs-target="#cancelOrderModal"
+      onClick={() => setCurrReservation_id(reservation_id)}
     >
       Cancel
     </button>
@@ -58,7 +59,7 @@ const ReservationsRowCard = ({ reservation }) => {
       >
         {status}
       </td>
-      <td>{status === "booked" ? seatedButton : null}</td>
+      <td>{seatedButton}</td>
       <td>{editButton}</td>
       <td>{cancelButton}</td>
     </tr>

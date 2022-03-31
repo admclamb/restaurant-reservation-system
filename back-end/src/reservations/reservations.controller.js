@@ -113,7 +113,7 @@ function validateStatus(req, res, next) {
   next();
 }
 
-const VALID_STATUS_PROPERTIES = ["booked", "seated", "finished"];
+const VALID_STATUS_PROPERTIES = ["booked", "seated", "finished", "cancelled"];
 // Validate update status
 function validateStatusUpdate(req, res, next) {
   const { status = null } = req.body.data;
@@ -201,7 +201,7 @@ async function create(req, res) {
 async function reservationExist(req, res, next) {
   const { reservation_id } = req.params;
   const reservation = await service.read(reservation_id);
-
+  console.log(reservation);
   if (reservation) {
     res.locals.reservation = reservation;
     return next();
@@ -212,6 +212,44 @@ async function reservationExist(req, res, next) {
 async function read(req, res, next) {
   const { reservation } = res.locals;
   res.status(200).json({ data: reservation });
+}
+
+const hasRequiredUpdateProperties = hasProperties(
+  ...[
+    "first_name",
+    "last_name",
+    "mobile_number",
+    "reservation_date",
+    "reservation_time",
+    "people",
+  ]
+);
+const has_only_valid_update_properties = hasOnlyValidProperties(
+  ...[
+    "first_name",
+    "last_name",
+    "mobile_number",
+    "reservation_date",
+    "reservation_time",
+    "people",
+    "status",
+    "reservation_id",
+    "created_at",
+    "updated_at",
+  ]
+);
+
+async function update(req, res, next) {
+  try {
+    const updatedReservation = {
+      ...req.body.data,
+      reservation_id: res.locals.reservation.reservation_id,
+    };
+    const data = await service.update(updatedReservation);
+    res.status(200).json({ data });
+  } catch (error) {
+    next(error);
+  }
 }
 
 async function updateStatus(req, res, next) {
@@ -240,11 +278,22 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(reservationExist), asyncErrorBoundary(read)],
+  update: [
+    asyncErrorBoundary(reservationExist),
+    hasRequiredUpdateProperties,
+    has_only_valid_update_properties,
+    validateDate,
+    storeIsOpen,
+    dateIsNotBeforeToday,
+    validateTime,
+    validatePeople,
+    validateReservationTime,
+    asyncErrorBoundary(update),
+  ],
   updateStatus: [
     asyncErrorBoundary(reservationExist),
     validateCurrentStatus,
     validateStatusUpdate,
-
     asyncErrorBoundary(updateStatus),
   ],
 };

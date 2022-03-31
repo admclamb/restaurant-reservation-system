@@ -1,9 +1,15 @@
 import ReservationsRowCard from "./ReservationsRowCard";
 
-const ReservationsTableRows = ({ reservations }) => {
+const ReservationsTableRows = ({ reservations, setCurrReservation_id }) => {
   if (Array.isArray(reservations) && reservations.length > 0) {
     const tableRowData = reservations.map((reservation, index) => {
-      return <ReservationsRowCard key={index} reservation={reservation} />;
+      return (
+        <ReservationsRowCard
+          key={index}
+          reservation={reservation}
+          setCurrReservation_id={setCurrReservation_id}
+        />
+      );
     });
 
     return <>{tableRowData}</>;
