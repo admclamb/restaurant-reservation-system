@@ -23,8 +23,11 @@ function Dashboard() {
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
-  const [currTable_id, setCurrTable_id] = useState();
   const [date, setDate] = useState(today());
+  // Current values being passed through seperate parts of the applications
+  const [currTable_id, setCurrTable_id] = useState("");
+  const [currReservation_id, setCurrReservation_id] = useState("");
+
   const query = useQuery();
 
   useEffect(() => {
@@ -57,6 +60,9 @@ function Dashboard() {
       .then(loadDashboard)
       .catch(setTablesError);
   }
+
+  // Cancels reservation
+  function cancelReservation() {}
 
   return (
     <>
@@ -113,11 +119,21 @@ function Dashboard() {
             handleFinishTable={handleFinishTable}
             setCurrTable_id={setCurrTable_id}
           />
+          {/* Modals for different parts of the applications */}
+
           {/*Handles finishing up a table in the tables table */}
           <StaticBackdropModal
             title={"Is this table ready to seat new guest?"}
             body={"This cannot be undone."}
+            id={"finishTable"}
             responseFunction={handleFinishTable}
+          />
+          {/*Handles canceling a reservation */}
+          <StaticBackdropModal 
+            title={"Do you want to cancel this reservation?"} 
+            body={"This cannot be undone."} 
+            id={"cancelOrderModal"} 
+            responseFunction={cancelReservation} 
           />
         </div>
       </main>

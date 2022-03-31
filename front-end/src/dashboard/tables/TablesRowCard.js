@@ -16,7 +16,7 @@ const TablesRowCard = ({ table, handleFinishTable, setCurrTable_id }) => {
           className="btn btn-success"
           data-table-id-finish={table.table_id}
           data-bs-toggle="modal"
-          data-bs-target="#staticBackdrop"
+          data-bs-target="#finishTable"
           onClick={() => setCurrTable_id(table.table_id)}
         >
           Finished

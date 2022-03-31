@@ -1,18 +1,18 @@
-const StaticBackdropModal = ({ title, body, responseFunction }) => {
+const StaticBackdropModal = ({ title, body, id, responseFunction }) => {
   return (
     <div
       className="modal fade"
-      id="staticBackdrop"
+      id={id}
       data-bas-backdrop="static"
       data-bs-keyboard="false"
       tabIndex="-1"
-      aria-labelledby="staticBackdropLabel"
+      aria-labelledby={`${id}Label`}
       aria-hidden="true"
     >
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="staticBackdropLabel">
+            <h5 className="modal-title" id={`${id}Label`}>
               {title}
             </h5>
             <button

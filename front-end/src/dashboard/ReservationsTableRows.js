@@ -11,7 +11,9 @@ const ReservationsTableRows = ({ reservations }) => {
 
   return (
     <tr>
-      <td>No Resrevations Today...</td>
+      <td>No reservations found</td>
+      <td></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>

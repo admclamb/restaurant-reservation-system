@@ -13,6 +13,8 @@ const ReservationsTable = ({ reservations }) => {
           <th scope="col">Date</th>
           <th scope="col">Status</th>
           <th scope="col">Seat</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Cancel</th>
         </tr>
       </thead>
       <tbody>

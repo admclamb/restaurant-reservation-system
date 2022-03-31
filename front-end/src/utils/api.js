@@ -113,8 +113,27 @@ export async function updateTableSeat(data, signal) {
   );
 }
 
-export async function finishReservationTable(table_id, signal) {
+export async function updateReservationStatus(reservation_id, status, signal) {
+  const url = new URL(`${API_BASE_URL}/tables/${reservation_id}/status`);
+  const body = { data: { status } };
+  const method = "PUT";
+  return await fetchJson(
+    url,
+    { headers, body: JSON.stringify(body), method },
+    []
+  );
+}
+
+export async function finishReservationTable(table_id, reservation_id, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   const method = "DELETE";
   return await fetchJson(url, { headers, method }, signal);
+}
+
+// GET resrvations by phone number lookup
+export async function list_reservations_phone(mobile_number, signal) {
+  const url = new URL(
+    `${API_BASE_URL}/reservations?mobile_number=${mobile_number}`
+  );
+  return await fetchJson(url, { headers, signal }, []);
 }

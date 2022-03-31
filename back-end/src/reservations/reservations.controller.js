@@ -171,9 +171,17 @@ function storeIsOpen(req, res, next) {
 }
 
 async function list(req, res) {
-  const { date = "" } = req.query;
-  const data = date ? await service.listByDate(date) : await service.list();
+  // If Date is query parameter or mobile number is query parameter,
+  // filter the correct information
+  const { date = "", mobile_number = "" } = req.query;
+  console.log(mobile_number);
+  const data = date
+    ? await service.listByDate(date)
+    : mobile_number
+    ? await service.listByNumber(mobile_number)
+    : await service.list();
   console.log(data);
+
   const dataNotFinished = data.filter(
     (reservation) => reservation.status !== "finished"
   );

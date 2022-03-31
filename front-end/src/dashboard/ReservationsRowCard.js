@@ -24,6 +24,26 @@ const ReservationsRowCard = ({ reservation }) => {
       Seat
     </Link>
   );
+
+  const editButton = (
+    <Link
+      to={`/reservations/${reservation_id}/edit`}
+      className="btn btn-success"
+    >
+      Edit
+    </Link>
+  );
+
+  const cancelButton = (
+    <button
+      className="btn btn-danger"
+      data-reservation-id-cancel={reservation.reservation_id}
+      data-bs-toggle="modal"
+      data-bs-target="#cancelOrderModal"
+    >
+      Cancel
+    </button>
+  );
   return (
     <tr>
       <td scope="row">{people}</td>
@@ -39,6 +59,8 @@ const ReservationsRowCard = ({ reservation }) => {
         {status}
       </td>
       <td>{status === "booked" ? seatedButton : null}</td>
+      <td>{editButton}</td>
+      <td>{cancelButton}</td>
     </tr>
   );
 };
