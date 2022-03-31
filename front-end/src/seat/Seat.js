@@ -16,7 +16,7 @@ const Seat = () => {
 
   return (
     <>
-      <header className="p-2">
+      <header className="p-2 container">
         <h1>Seat</h1>
       </header>
       <main className="seat container">

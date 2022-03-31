@@ -58,6 +58,9 @@ const NewReservation = () => {
     );
 
     const day = getDayOfWeek(reservation_date);
+    if (!day) {
+      return;
+    }
     const opening = OPENING_HOURS[day.toLowerCase().substring(0, 3)].open;
     const lastCall = OPENING_HOURS[day.toLowerCase().substring(0, 3)].lastCall;
 
@@ -199,7 +202,7 @@ const NewReservation = () => {
             Cancel
           </button>
           <button
-            className="btn btn-primary"
+            className="btn btn-main"
             type="submit"
             form="new-reservation-form"
             value="Submit"

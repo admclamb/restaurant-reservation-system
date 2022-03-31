@@ -81,7 +81,7 @@ const NewTable = () => {
             Cancel
           </button>
           <button
-            className="btn btn-primary"
+            className="btn btn-main"
             type="submit"
             form="new-table-form"
             value="Submit"

@@ -19,7 +19,7 @@ const ReservationsRowCard = ({ reservation, setCurrReservation_id }) => {
   const seatedButton = (
     <Link
       to={`/reservations/${reservation_id}/seat`}
-      className={"btn btn-success" + (status !== "booked" ? " disabled" : "")}
+      className={"btn btn-main" + (status !== "booked" ? " disabled" : "")}
     >
       Seat
     </Link>
@@ -28,7 +28,7 @@ const ReservationsRowCard = ({ reservation, setCurrReservation_id }) => {
   const editButton = (
     <Link
       to={`/reservations/${reservation_id}/edit`}
-      className={"btn btn-success" + (status !== "booked" ? " disabled" : "")}
+      className={"btn btn-main" + (status !== "booked" ? " disabled" : "")}
     >
       Edit
     </Link>

@@ -23,7 +23,7 @@ const Search = () => {
     <>
       <main className="container pt-3 mb-5">
         <h1>Search</h1>
-        <p clas>Search reservation by phone number</p>
+        <p className="mb-4">Search reservation by phone number</p>
         <form className="row" id="phone-lookup" onSubmit={handleSubmit}>
           <ErrorAlert error={mobile_numberError} />
           <div className="col-12 mb-2">
@@ -42,7 +42,7 @@ const Search = () => {
           </div>
           <div className="col-12">
             <button
-              className="btn btn-primary"
+              className="btn btn-main"
               type="submit"
               value="Find"
               form="phone-lookup"

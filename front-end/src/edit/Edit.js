@@ -201,7 +201,7 @@ const Edit = () => {
               Cancel
             </button>
             <button
-              className="btn btn-primary"
+              className="btn btn-main"
               type="submit"
               form="edit-reservation-form"
               value="Submit"

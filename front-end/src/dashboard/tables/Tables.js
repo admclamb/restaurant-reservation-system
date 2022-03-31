@@ -5,7 +5,7 @@ const Tables = ({ tables, handleFinishTable, setCurrTable_id }) => {
     <>
       <table className="table container-fluid">
         <thead>
-          <tr>
+          <tr className="bg-main--light">
             <th scope="col">Table Name</th>
             <th scope="col">Capacity</th>
             <th scope="col">Free/Occupied</th>

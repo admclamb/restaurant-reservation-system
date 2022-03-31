@@ -33,7 +33,7 @@ const StaticBackdropModal = ({ title, body, id, responseFunction }) => {
             </button>
             <button
               type="button"
-              className="btn btn-primary"
+              className="btn btn-main"
               onClick={responseFunction}
               data-bs-dismiss="modal"
             >

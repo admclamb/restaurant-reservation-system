@@ -4,7 +4,7 @@ const ReservationsTable = ({ reservations, setCurrReservation_id }) => {
   return (
     <table className="table container-fluid">
       <thead>
-        <tr>
+        <tr className="bg-main--light">
           <th scope="col">Size</th>
           <th scope="col">First</th>
           <th scope="col">Last</th>
