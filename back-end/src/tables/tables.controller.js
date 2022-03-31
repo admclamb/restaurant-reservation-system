@@ -136,28 +136,14 @@ async function read(req, res) {
   res.status(200).json({ data: table });
 }
 
-async function update(req, res, next) {
+async function seatReservation(req, res, next) {
   // Seats reservation: updates reservation status and updates table
-  try {
-    console.log("before update", res.locals.table, res.locals.reservation);
-    const updatedTable = {
-      ...res.locals.table,
-      reservation_id: req.body.data.reservation_id,
-      occupied: true,
-    };
-    const updatedReservation = {
-      ...res.locals.reservation,
-      status: "seated",
-    };
-    const data = await service.updateSeatTable(
-      updatedTable,
-      updatedReservation
-    );
-    console.log("updated", data);
-    res.status(200).json({ data });
-  } catch (error) {
-    next(error);
-  }
+  const {
+    table: { table_id },
+    reservation: { reservation_id },
+  } = res.locals;
+  const data = await service.seatReservation(table_id, reservation_id);
+  res.status(200).json({ data });
 }
 
 // Checks if reservation is seated
@@ -171,17 +157,9 @@ async function reservationIsSeated(req, res, next) {
 
 // updates reservation to finished and updates occupied table
 async function destroy(req, res, next) {
-  const updatedTable = {
-    ...res.locals.table,
-    reservation_id: null,
-    occupied: false,
-  };
-  const updatedReservation = {
-    ...res.locals.reservation,
-    status: "finished",
-  };
-  const data = await service.updateSeatTable(updatedTable, updatedReservation);
-
+  const { table_id, reservation_id } = res.locals.table;
+  const data = await service.finishTable(table_id, reservation_id);
+  console.log(data);
   res.sendStatus(200);
 }
 
@@ -195,7 +173,7 @@ module.exports = {
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
-  update: [
+  seat: [
     asyncErrorBoundary(tableExists),
     validateDataProperty,
     validateReservationID,
@@ -203,12 +181,11 @@ module.exports = {
     reservationIsSeated,
     asyncErrorBoundary(hasSufficientCapacity),
     tableIsUnoccupied,
-    asyncErrorBoundary(update),
+    asyncErrorBoundary(seatReservation),
   ],
   destroy: [
     asyncErrorBoundary(tableExists),
     tableIsOccupied,
-    asyncErrorBoundary(reservationExist),
     asyncErrorBoundary(destroy),
   ],
 };
