@@ -67,10 +67,22 @@ export async function listReservations(params, signal) {
     .then(formatReservationTime);
 }
 
+/**
+ * Retrieves all existing Tables.
+ * @returns {Promise<[tables]>}
+ *  a promise that resolves to a possibly empty array of reservation saved in the database.
+ */
+
 export async function listTables(signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
   return await fetchJson(url, { headers }, []);
 }
+
+/**
+ * Retrieves a reservation from a reservation_id
+ * @returns {Promise<[reservation]>}
+ *  a promise that resolves to a possibly empty array of reservation saved in the database.
+ */
 
 export async function readReservation(reservation_id, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
@@ -78,10 +90,22 @@ export async function readReservation(reservation_id, signal) {
   return await fetchJson(url, { signal }, []);
 }
 
+/**
+ * Retrieves a Table from a table_id
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a possibly empty array of reservation saved in the database.
+ */
+
 export async function readTable(table_id, signal) {
   const url = new URL(`${API_BASE_URL}/${table_id}`);
   return await fetchJson(url, { signal }, []);
 }
+
+/**
+ * Creates and returns a reservation.
+ * @returns {Promise<[reservation]>}
+ *  a promise that resolves to a possibly empty array of reservation saved in the database.
+ */
 
 export async function createReservation(data, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
@@ -137,10 +161,14 @@ export async function updateReservationStatus(reservation_id, status, signal) {
   );
 }
 
-export async function finishReservationTable(table_id, reservation_id, signal) {
+export async function finishReservationTable(table_id, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   const method = "DELETE";
-  return await fetchJson(url, { headers, method }, signal);
+  return await fetchJson(
+    url,
+    { headers, body: JSON.stringify({}), method },
+    signal
+  );
 }
 
 // GET resrvations by phone number lookup

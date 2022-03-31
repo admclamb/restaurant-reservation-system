@@ -24,6 +24,9 @@ const SeatForm = ({ tables }) => {
     event.preventDefault();
     try {
       const abortController = new AbortController();
+      if (!table_id) {
+        return;
+      }
       const data = { reservation_id, table_id };
       const response = await updateTableSeat(data, abortController.signal);
       console.log(response);
@@ -47,6 +50,7 @@ const SeatForm = ({ tables }) => {
         value={table_id}
         onChange={({ target }) => setTable_id(target.value)}
       >
+        <option selected>Choose a Table</option>
         {tablesOptions}
       </select>
       <div className="form-buttons mt-4">
