@@ -32,6 +32,7 @@ headers.append("Content-Type", "application/json");
 async function fetchJson(url, options, onCancel) {
   try {
     const response = await fetch(url, options);
+
     if (response.status === 204) {
       return null;
     }
@@ -73,11 +74,13 @@ export async function listReservations(params, signal) {
  *  a promise that resolves to a possibly empty array of reservation saved in the database.
  */
 
-export async function listTables(signal) {
+export async function listTables(params, signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
-  return await fetchJson(url, { headers }, []);
+  Object.entries(params).forEach(([key, value]) =>
+    url.searchParams.append(key, value.toString())
+  );
+  return await fetchJson(url, { headers, signal }, []);
 }
-
 /**
  * Retrieves a reservation from a reservation_id
  * @returns {Promise<[reservation]>}
@@ -86,7 +89,6 @@ export async function listTables(signal) {
 
 export async function readReservation(reservation_id, signal) {
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
-  console.log(url);
   return await fetchJson(url, { signal }, []);
 }
 
@@ -116,6 +118,18 @@ export async function createReservation(data, signal) {
     { headers, body: JSON.stringify(body), method, signal },
     []
   );
+}
+
+export async function createTable(data, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const body = { data };
+  const method = "POST";
+  return await fetchJson(url, {
+    headers,
+    body: JSON.stringify(body),
+    method,
+    signal,
+  });
 }
 
 export async function updateReservation(data, reservation_id, signal) {
@@ -150,7 +164,6 @@ export async function updateTableSeat(data, signal) {
 }
 
 export async function updateReservationStatus(reservation_id, status, signal) {
-  console.log(reservation_id, status);
   const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}/status`);
   const body = { data: { status } };
   const method = "PUT";
@@ -164,11 +177,7 @@ export async function updateReservationStatus(reservation_id, status, signal) {
 export async function finishReservationTable(table_id, signal) {
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   const method = "DELETE";
-  return await fetchJson(
-    url,
-    { headers, body: JSON.stringify({}), method },
-    signal
-  );
+  return await fetchJson(url, { headers, method }, signal);
 }
 
 // GET resrvations by phone number lookup

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
+import { createTable } from "../utils/api";
 
 const NewTable = () => {
   const history = useHistory();
@@ -41,8 +42,9 @@ const NewTable = () => {
       });
       return;
     }
+    const abortController = new AbortController();
+    createTable(table).catch(setTableError, abortController.signal);
     history.push("/dashboard");
-    return;
   };
 
   console.log(table);

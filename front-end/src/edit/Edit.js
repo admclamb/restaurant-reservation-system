@@ -101,12 +101,16 @@ const Edit = () => {
       }
       event.preventDefault();
       history.goBack();
-      const response = await updateReservation(reservation, reservation_id);
+      const abortController = new AbortController();
+      const response = await updateReservation(
+        reservation,
+        reservation_id,
+        abortController.signal
+      );
     } catch (error) {
       setReservationError({ message: error });
     }
   };
-  console.log(reservation);
   return (
     <>
       <main className="container pt-3 mb-5">

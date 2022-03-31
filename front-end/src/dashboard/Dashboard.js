@@ -50,7 +50,6 @@ function Dashboard() {
   // Update tables and delete reservation when function is called in the tables row button
   function handleFinishTable() {
     const abortController = new AbortController();
-    console.log(currTable_id);
     setTablesError(null);
     finishReservationTable(currTable_id)
       .then(loadDashboard)

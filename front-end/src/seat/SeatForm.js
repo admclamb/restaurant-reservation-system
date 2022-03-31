@@ -29,7 +29,6 @@ const SeatForm = ({ tables }) => {
       }
       const data = { reservation_id, table_id };
       const response = await updateTableSeat(data, abortController.signal);
-      console.log(response);
       history.push("/");
     } catch (error) {
       setTableError(error);
@@ -50,7 +49,7 @@ const SeatForm = ({ tables }) => {
         value={table_id}
         onChange={({ target }) => setTable_id(target.value)}
       >
-        <option selected>Choose a Table</option>
+        <option value="selected">Choose a Table</option>
         {tablesOptions}
       </select>
       <div className="form-buttons mt-4">

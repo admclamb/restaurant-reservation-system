@@ -112,7 +112,6 @@ async function update(req, res) {
 }
 
 async function updateStatus(req, res) {
-  console.log("here");
   const updatedReservation = {
     ...res.locals.reservation,
     status: req.body.data.status,

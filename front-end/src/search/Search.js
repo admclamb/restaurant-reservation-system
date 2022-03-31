@@ -11,14 +11,17 @@ const Search = () => {
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
-      const response = await list_reservations_phone(mobile_number);
+      const abortController = new AbortController();
+      const response = await list_reservations_phone(
+        mobile_number,
+        abortController.signal
+      );
       setFoundReservations(response);
       setMobile_number("");
     } catch (error) {
       setMobile_numberError(error);
     }
   };
-  console.log(foundReservations);
   return (
     <>
       <main className="container pt-3 mb-5">

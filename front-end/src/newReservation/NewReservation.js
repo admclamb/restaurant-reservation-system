@@ -89,7 +89,11 @@ const NewReservation = () => {
       return;
     }
     try {
-      const response = await createReservation(reservation);
+      const abortController = new AbortController();
+      const response = await createReservation(
+        reservation,
+        abortController.signal
+      );
       setReservation(initReservation);
       history.push(`/dashboard?date=${reservation.reservation_date}`);
     } catch (error) {

@@ -75,7 +75,6 @@ const VALID_STATUS_PROPERTIES = ["booked", "seated", "finished", "cancelled"];
 function validateStatusUpdate(req, res, next) {
   const { status = null } = req.body.data;
   if (status && VALID_STATUS_PROPERTIES.includes(status)) {
-    console.log("moving on");
     return next();
   }
   next({ status: 400, message: "unknown" });

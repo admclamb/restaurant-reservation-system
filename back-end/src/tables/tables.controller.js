@@ -55,7 +55,6 @@ async function hasSufficientCapacity(req, res, next) {
 async function tableExists(req, res, next) {
   const { table_id } = req.params;
   const table = await service.read(table_id);
-  console.log(table);
   if (table) {
     res.locals.table = table;
     return next();
@@ -68,7 +67,6 @@ async function reservationExist(req, res, next) {
   if (!reservation_id) {
     reservation_id = res.locals.table.reservation_id;
   }
-  console.log(reservation_id);
   const reservation = await service.readReservationID(reservation_id);
   if (reservation) {
     res.locals.reservation = reservation;
@@ -159,7 +157,6 @@ async function reservationIsSeated(req, res, next) {
 async function destroy(req, res, next) {
   const { table_id, reservation_id } = res.locals.table;
   const data = await service.finishTable(table_id, reservation_id);
-  console.log(data);
   res.sendStatus(200);
 }
 
