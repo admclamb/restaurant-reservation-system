@@ -92,6 +92,7 @@ async function list(req, res) {
   const sortedReservations = reservationsNotFinished.sort((firstEl, secEl) => {
     return firstEl.reservation_time.localeCompare(secEl.reservation_time);
   });
+  console.log("reservations: ", sortedReservations);
   res.status(200).json({ data: sortedReservations });
 }
 

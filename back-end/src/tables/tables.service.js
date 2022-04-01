@@ -70,6 +70,7 @@ async function finishTable(table_id, reservation_id) {
         .select("*")
         .where({ reservation_id })
         .update({ status: "finished" }, "*");
+      console.log("----", table);
       return table;
     });
   } catch (error) {

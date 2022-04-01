@@ -120,6 +120,7 @@ async function list(req, res) {
   const sortedTables = tables.sort((a, b) =>
     a.table_name > b.table_name ? 1 : b.table_name > a.table_name ? -1 : 0
   );
+  console.log("table: ", sortedTables);
   res.status(200).json({ data: sortedTables });
 }
 
@@ -157,7 +158,8 @@ async function reservationIsSeated(req, res, next) {
 async function destroy(req, res, next) {
   const { table_id, reservation_id } = res.locals.table;
   const data = await service.finishTable(table_id, reservation_id);
-  res.sendStatus(200);
+  console.log("finishing table: ", data);
+  res.status(200).json({ data: res.locals.table });
 }
 
 module.exports = {
