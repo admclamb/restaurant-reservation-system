@@ -51,7 +51,7 @@ function Dashboard() {
   function handleFinishTable() {
     const abortController = new AbortController();
     setTablesError(null);
-    finishReservationTable(currTable_id)
+    finishReservationTable(currTable_id, "finished", abortController.signal)
       .then(loadDashboard)
       .catch(setTablesError);
   }
@@ -60,7 +60,11 @@ function Dashboard() {
   function cancelReservation() {
     const abortController = new AbortController();
     setReservationsError(null);
-    updateReservationStatus(currReservation_id, "cancelled")
+    updateReservationStatus(
+      currReservation_id,
+      "cancelled",
+      abortController.signal
+    )
       .then(loadDashboard)
       .catch(setReservationsError);
   }
