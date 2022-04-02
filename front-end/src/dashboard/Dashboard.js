@@ -57,30 +57,25 @@ function Dashboard() {
   }
 
   // Update tables and delete reservation when function is called in the tables row button
-  function handleFinishTable() {
+  async function handleFinishTable() {
     console.log("handlefinishTable begin");
     const abortController = new AbortController();
     setTablesError(null);
 
-    finishReservationTable(currTable_id, abortController.signal)
-      .then((res) => {
-        console.log("finish table =====>", res);
-        loadDashboard();
-      })
-      .catch(setTablesError);
+    await finishReservationTable(currTable_id, abortController.signal);
+    loadDashboard();
   }
 
   // Cancels reservation
-  function cancelReservation() {
+  async function cancelReservation() {
     const abortController = new AbortController();
     setReservationsError(null);
-    updateReservationStatus(
+    await updateReservationStatus(
       currReservation_id,
       "cancelled",
       abortController.signal
-    )
-      .then(loadDashboard)
-      .catch(setReservationsError);
+    ).catch(setReservationsError);
+    loadDashboard();
   }
 
   return (
