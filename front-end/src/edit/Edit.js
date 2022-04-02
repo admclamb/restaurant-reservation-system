@@ -72,9 +72,8 @@ const Edit = () => {
       );
 
       const day = getDayOfWeek(reservation_date);
-      const opening = OPENING_HOURS[day.toLowerCase().substring(0, 3)].open;
-      const lastCall =
-        OPENING_HOURS[day.toLowerCase().substring(0, 3)].lastCall;
+      const opening = OPENING_HOURS[day.substring(0, 3)].open;
+      const lastCall = OPENING_HOURS[day.substring(0, 3)].lastCall;
 
       // Check if reservation is during opening hours and before last call
       if (!(reservation_time > opening && reservation_time < lastCall)) {
@@ -96,7 +95,7 @@ const Edit = () => {
         return;
       }
       //lowercase string first three letters such as mon, tue, wed, etc.
-      if (!OPENING_HOURS.storeIsOpen(day.toLowerCase().substring(0, 3))) {
+      if (!OPENING_HOURS.storeIsOpen(day.substring(0, 3))) {
         setReservationError({ message: "The store is not open on that day" });
         return;
       }
