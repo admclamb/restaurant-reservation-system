@@ -156,7 +156,6 @@ async function reservationIsSeated(req, res, next) {
 // updates reservation to finished and updates occupied table
 async function destroy(req, res, next) {
   const data = await service.finishTable(res.locals.table);
-  console.log(data);
   res.status(200).json({ data: res.locals.table });
 }
 
