@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationForm from "../ReservationForm.js/ReservationForm";
 import { readReservation, updateReservation } from "../utils/api";
 import {
   dateIsBeforeOtherDate,
@@ -116,104 +117,12 @@ const Edit = () => {
       <main className="container pt-3 mb-5">
         <h1>Edit Reservation</h1>
         <ErrorAlert error={reservationError} />
-        <form
-          id="edit-reservation-form"
-          className="row g-3"
-          onSubmit={handleSubmit}
-        >
-          <div className="col-md-6">
-            <label htmlFor="first_name">First Name</label>
-            <input
-              id="first_name"
-              className="form-control"
-              placeholder="First Name"
-              aria-describedby="firstName"
-              value={reservation.first_name}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-6">
-            <label htmlFor="last_name">Last Name</label>
-            <input
-              id="last_name"
-              className="form-control"
-              placeholder="Last Name"
-              aria-describedby="lastName"
-              value={reservation.last_name}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-4">
-            <label htmlFor="mobile_number">Mobile Number</label>
-            <input
-              id="mobile_number"
-              className="form-control"
-              type="tel"
-              placeholder="Mobile Number"
-              arira-aria-describedby="mobileNumber"
-              value={reservation.mobile_number}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-4">
-            <label htmlFor="reservation_date">Date of Reservation</label>
-            <input
-              id="reservation_date"
-              className="form-control"
-              type="date"
-              placeholder="Reservation Date"
-              aria-describedby="date"
-              value={reservation.reservation_date}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-4">
-            <label htmlFor="reservation_time">Time of Reservation</label>
-            <input
-              id="reservation_time"
-              className="form-control"
-              type="time"
-              placeholder="Reservation Time"
-              value={reservation.reservation_time}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-4">
-            <label htmlFor="people">Party Size</label>
-            <input
-              type="number"
-              id="people"
-              className="form-control"
-              placeholder="Number of people"
-              aria-describedby="numberOfPeople"
-              value={reservation.people}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="col-md-4">
-            <label htmlFor="status">Status</label>
-            <input
-              id="status"
-              className="form-control"
-              placeholder="Reservation Status"
-              value={reservation.status}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-btns">
-            <button className="btn btn-secondary me-3" onClick={handleCancel}>
-              Cancel
-            </button>
-            <button
-              className="btn btn-main"
-              type="submit"
-              form="edit-reservation-form"
-              value="Submit"
-            >
-              Submit
-            </button>
-          </div>
-        </form>
+        <ReservationForm
+          reservation={reservation}
+          handleCancel={handleCancel}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+        />
       </main>
     </>
   );
