@@ -57,7 +57,7 @@ const NewReservation = () => {
       today()
     );
 
-    const day = getDayOfWeek(reservation_date);
+    const day = await getDayOfWeek(reservation_date);
     if (!day) {
       return;
     }

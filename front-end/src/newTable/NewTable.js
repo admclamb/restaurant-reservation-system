@@ -46,9 +46,6 @@ const NewTable = () => {
     createTable(table).catch(setTableError, abortController.signal);
     history.push("/dashboard");
   };
-
-  console.log(table);
-  console.log(tableError);
   return (
     <main className="container pt-3 mb-5">
       <h1>New Table</h1>

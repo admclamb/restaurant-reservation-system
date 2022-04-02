@@ -39,43 +39,34 @@ function Dashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
-      .then((response) => {
-        console.log("reservations ===>", response);
-        return response;
-      })
       .then(setReservations)
-
       .catch(setReservationsError);
     listTables({ date }, abortController.signal)
-      .then((response) => {
-        console.log("tables ===>", response);
-        return response;
-      })
       .then(setTables)
       .catch(setTablesError);
     return () => abortController.abort();
   }
 
   // Update tables and delete reservation when function is called in the tables row button
-  async function handleFinishTable() {
-    console.log("handlefinishTable begin");
+  function handleFinishTable() {
     const abortController = new AbortController();
     setTablesError(null);
-
-    await finishReservationTable(currTable_id, abortController.signal);
-    loadDashboard();
+    finishReservationTable(currTable_id, abortController.signal)
+      .catch(setTablesError)
+      .then(loadDashboard);
   }
 
   // Cancels reservation
-  async function cancelReservation() {
+  function cancelReservation() {
     const abortController = new AbortController();
     setReservationsError(null);
-    await updateReservationStatus(
+    updateReservationStatus(
       currReservation_id,
       "cancelled",
       abortController.signal
-    ).catch(setReservationsError);
-    loadDashboard();
+    )
+      .catch(setReservationsError)
+      .then(loadDashboard);
   }
 
   return (

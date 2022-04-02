@@ -30,16 +30,14 @@ headers.append("Content-Type", "application/json");
  *  If the response is not in the 200 - 399 range the promise is rejected.
  */
 async function fetchJson(url, options, onCancel) {
-  console.log("inside fetchJson");
   try {
     const response = await fetch(url, options);
-    console.log("response", response);
+    console.log(response);
     if (response.status === 204) {
       return null;
     }
 
     const payload = await response.json();
-    console.log("payload", payload);
     if (payload.error) {
       return Promise.reject({ message: payload.error });
     }
@@ -176,11 +174,9 @@ export async function updateReservationStatus(reservation_id, status, signal) {
 }
 
 export async function finishReservationTable(table_id, signal) {
-  console.log("in finish table reservation");
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   const method = "DELETE";
   const response = await fetchJson(url, { headers, method }, signal);
-  console.log("finish table: ", response);
   return response;
 }
 

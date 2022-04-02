@@ -58,24 +58,19 @@ async function seatReservation(table_id, reservation_id) {
   }
 }
 
-async function finishTable(table_id, reservation_id) {
-  try {
-    await knex.transaction(async (trx) => {
-      const table = await trx("tables")
-        .select("*")
-        .where({ table_id })
-        .update({ reservation_id: null, occupied: false }, "*")
-        .then((updatedRecords) => updatedRecords[0]);
-      await trx("reservations")
-        .select("*")
-        .where({ reservation_id })
-        .update({ status: "finished" }, "*");
-      console.log("----", table);
-      return table;
-    });
-  } catch (error) {
-    return { error };
-  }
+function finishTable(table) {
+  return knex.transaction(async (transaction) => {
+    await knex("reservations")
+      .where({ reservation_id: table.reservation_id })
+      .update({ status: "finished" })
+      .transacting(transaction);
+
+    return knex("tables")
+      .where({ table_id: table.table_id })
+      .update({ reservation_id: null, occupied: false }, "*")
+      .transacting(transaction)
+      .then((records) => records[0]);
+  });
 }
 
 function destroyReservation(reservation_id) {
