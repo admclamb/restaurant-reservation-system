@@ -52,7 +52,7 @@ function getDayOfWeek(date) {
         "thursday",
         "friday",
         "saturday",
-      ][dayOfWeek + 1];
+      ][dayOfWeek];
 }
 
 /**
