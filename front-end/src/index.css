@@ -4,7 +4,8 @@
   box-sizing: border-box;
 }
 :root {
-  --color-main: #393a44;
+  /* --color-main: #393a44; */
+  --color-main: red;
   --color-light: #bbbdd6;
   --btn-main: #474a61;
   --btn-main--hover: #343649;
