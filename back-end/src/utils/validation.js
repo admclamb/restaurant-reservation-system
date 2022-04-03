@@ -135,7 +135,9 @@ function storeIsOpen(req, res, next) {
   }
   next({
     status: 400,
-    message: `closed, day: ${dayOfWeek}, ${OPENING_HOURS}`,
+    message: `closed, day: ${dayOfWeek}, ${
+      OPENING_HOURS[dayOfWeek.substring(0, 3)]
+    }`,
   });
 }
 
