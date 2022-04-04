@@ -20,6 +20,7 @@ function validateTableName(req, res, next) {
 
 function validateCapacity(req, res, next) {
   const { capacity = null } = req.body.data;
+  console.log("backend: capacity: ", capacity);
   if (!capacity) {
     return next({
       status: 400,

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import { createTable } from "../utils/api";
+import { validateNewTable } from "../utils/validation";
 
 const NewTable = () => {
   const history = useHistory();
@@ -12,7 +13,7 @@ const NewTable = () => {
   const [table, setTable] = useState(initTable);
   const [tableError, setTableError] = useState(null);
   const handleCancel = () => {
-    history.push("/");
+    history.goBack();
     return;
   };
 
@@ -27,24 +28,14 @@ const NewTable = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const { table_name, capacity } = table;
-    // Check table length is at least two
-    if (table_name.length < 2) {
-      setTableError({
-        message: "Table name must be at least 2 characters long",
-      });
+    const validation = validateNewTable(table);
+    if (!validation) {
+      const abortController = new AbortController();
+      createTable(table).catch(setTableError, abortController.signal);
+      history.push("/dashboard");
       return;
     }
-    // Check capacity is at least one
-    if (capacity < 1) {
-      setTableError({
-        message: "Table capacity must be at least 1 person",
-      });
-      return;
-    }
-    const abortController = new AbortController();
-    createTable(table).catch(setTableError, abortController.signal);
-    history.push("/dashboard");
+    setTableError(validation);
   };
   return (
     <main className="container pt-3 mb-5">
