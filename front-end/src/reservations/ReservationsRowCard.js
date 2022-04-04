@@ -47,7 +47,7 @@ const ReservationsRowCard = ({ reservation, setCurrReservation_id }) => {
   );
   return (
     <tr>
-      <td scope="row">{people}</td>
+      <td>{people}</td>
       <td>{first_name}</td>
       <td>{last_name}</td>
       <td>{mobile_number}</td>

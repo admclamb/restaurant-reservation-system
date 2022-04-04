@@ -31,7 +31,10 @@ const EditReservation = () => {
     async function getReservation() {
       try {
         const abortController = new AbortController();
-        const response = await readReservation(reservation_id);
+        const response = await readReservation(
+          reservation_id,
+          abortController.signal
+        );
         setReservation(response);
         setReservationError(null);
       } catch (error) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import TableOption from "./TableOption";
 import { updateTableSeat } from "../../utils/api";
@@ -28,7 +28,7 @@ const SeatForm = ({ tables }) => {
         return;
       }
       const data = { reservation_id, table_id };
-      const response = await updateTableSeat(data, abortController.signal);
+      await updateTableSeat(data, abortController.signal);
       history.push("/");
     } catch (error) {
       setTableError(error);

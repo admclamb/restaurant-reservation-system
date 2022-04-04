@@ -8,7 +8,6 @@ import {
   getDayOfWeek,
   dateIsBeforeOtherDate,
 } from "../utils/date-time";
-import { hours } from "../utils/opening-hours";
 import { OPENING_HOURS } from "../utils/opening-hours";
 import ReservationForm from "../components/Form";
 const NewReservation = () => {
@@ -24,8 +23,6 @@ const NewReservation = () => {
 
   const [reservation, setReservation] = useState(initReservation);
   const [reservationError, setReservationError] = useState(null);
-  const [currentDay, setCurrentDay] = useState(today());
-  const [currentTime, setCurrentTime] = useState(time());
   const history = useHistory();
   const handleChange = ({ target }) => {
     const { id } = target;
@@ -91,10 +88,7 @@ const NewReservation = () => {
     }
     try {
       const abortController = new AbortController();
-      const response = await createReservation(
-        reservation,
-        abortController.signal
-      );
+      await createReservation(reservation, abortController.signal);
       setReservation(initReservation);
       history.push(`/dashboard?date=${reservation.reservation_date}`);
     } catch (error) {

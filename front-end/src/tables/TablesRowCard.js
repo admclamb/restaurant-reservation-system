@@ -2,7 +2,7 @@ const TablesRowCard = ({ table, setCurrTable_id }) => {
   const { table_name, capacity, occupied } = table;
   return (
     <tr>
-      <td scope="row">{table_name}</td>
+      <td>{table_name}</td>
       <td>{capacity}</td>
       <td data-table-id-status={table.table_id}>
         {occupied ? "Occupied" : "Free"}
