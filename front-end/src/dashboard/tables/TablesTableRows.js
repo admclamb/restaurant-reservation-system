@@ -6,7 +6,7 @@ const TablesTableRows = ({ tables, handleFinishTable, setCurrTable_id }) => {
       return (
         <TablesRowCard
           table={table}
-          key={index}
+          key={table.table_id}
           handleFinishTable={handleFinishTable}
           setCurrTable_id={setCurrTable_id}
         />
