@@ -1,7 +1,7 @@
 import { useState } from "react";
-import ReservationsTable from "../dashboard/ReservationsTable";
-import ErrorAlert from "../layout/ErrorAlert";
-import { list_reservations_phone } from "../utils/api";
+import ReservationsTable from "../../reservations/ReservationsTable";
+import ErrorAlert from "../../layout/ErrorAlert";
+import { list_reservations_phone } from "../../utils/api";
 
 const Search = () => {
   const [foundReservations, setFoundReservations] = useState([]);

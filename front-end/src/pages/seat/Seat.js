@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ErrorAlert from "../layout/ErrorAlert";
-import { listTables, updateTableSeat } from "../utils/api";
+import ErrorAlert from "../../layout/ErrorAlert";
+import { listTables, updateTableSeat } from "../../utils/api";
 import SeatForm from "./SeatForm";
 
 const Seat = () => {

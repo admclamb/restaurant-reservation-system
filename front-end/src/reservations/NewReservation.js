@@ -10,7 +10,7 @@ import {
 } from "../utils/date-time";
 import { hours } from "../utils/opening-hours";
 import { OPENING_HOURS } from "../utils/opening-hours";
-import ReservationForm from "../ReservationForm.js/ReservationForm";
+import ReservationForm from "../components/Form";
 const NewReservation = () => {
   const initReservation = {
     first_name: "",

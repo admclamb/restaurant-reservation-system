@@ -42,16 +42,17 @@ function time() {
  */
 function getDayOfWeek(date) {
   const dayOfWeek = new Date(date).getDay();
+
   return isNaN(dayOfWeek)
     ? null
     : [
-        "sunday",
         "monday",
         "tuesday",
         "wednesday",
         "thursday",
         "friday",
         "saturday",
+        "sunday",
       ][dayOfWeek];
 }
 

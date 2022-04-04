@@ -1,41 +1,41 @@
 const OPENING_HOURS = {
-  mon: {
+  monday: {
     isOpen: true,
     open: "10:30",
     close: "22:30",
     lastCall: "21:30",
   },
-  tue: {
+  tuesday: {
     isOpen: false,
     open: "10:30",
     close: "22:30",
     lastCall: "21:30",
   },
-  wed: {
+  wednesday: {
     isOpen: true,
     open: "10:30",
     close: "22:30",
     lastCall: "21:30",
   },
-  thu: {
+  thursday: {
     isOpen: true,
     open: "10:30",
     close: "22:30",
     lastCall: "21:30",
   },
-  fri: {
+  friday: {
     isOpen: true,
     open: "10:30",
     close: "22:30",
     lastCall: "21:30",
   },
-  sat: {
+  saturday: {
     isOpen: true,
     open: "10:30",
     close: "22:30",
     lastCall: "21:30",
   },
-  sun: {
+  sunday: {
     isOpen: true,
     open: "10:30",
     close: "22:30",

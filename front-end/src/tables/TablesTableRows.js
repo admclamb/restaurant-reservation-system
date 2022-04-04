@@ -1,13 +1,12 @@
 import TablesRowCard from "./TablesRowCard";
 
-const TablesTableRows = ({ tables, handleFinishTable, setCurrTable_id }) => {
+const TablesTableRows = ({ tables, setCurrTable_id }) => {
   if (Array.isArray(tables) && tables.length > 0) {
     const tableRowData = tables.map((table, index) => {
       return (
         <TablesRowCard
           table={table}
           key={table.table_id}
-          handleFinishTable={handleFinishTable}
           setCurrTable_id={setCurrTable_id}
         />
       );

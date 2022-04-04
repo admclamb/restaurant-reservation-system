@@ -1,4 +1,4 @@
-const TablesRowCard = ({ table, handleFinishTable, setCurrTable_id }) => {
+const TablesRowCard = ({ table, setCurrTable_id }) => {
   const { table_name, capacity, occupied } = table;
   return (
     <tr>

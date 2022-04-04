@@ -1,6 +1,6 @@
 import TablesTableRows from "./TablesTableRows";
 
-const Tables = ({ tables, handleFinishTable, setCurrTable_id }) => {
+const Tables = ({ tables, setCurrTable_id }) => {
   return (
     <>
       <table className="table container-fluid">
@@ -13,11 +13,7 @@ const Tables = ({ tables, handleFinishTable, setCurrTable_id }) => {
           </tr>
         </thead>
         <tbody>
-          <TablesTableRows
-            tables={tables}
-            handleFinishTable={handleFinishTable}
-            setCurrTable_id={setCurrTable_id}
-          />
+          <TablesTableRows tables={tables} setCurrTable_id={setCurrTable_id} />
         </tbody>
       </table>
     </>

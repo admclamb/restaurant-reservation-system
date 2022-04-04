@@ -1,9 +1,4 @@
-const ReservationForm = ({
-  reservation,
-  handleSubmit,
-  handleChange,
-  handleCancel,
-}) => {
+const Form = ({ reservation, handleSubmit, handleChange, handleCancel }) => {
   return (
     <form className="row g-3" id="new-reservation-form" onSubmit={handleSubmit}>
       <div className="col-md-4">
@@ -115,4 +110,4 @@ const ReservationForm = ({
   );
 };
 
-export default ReservationForm;
+export default Form;

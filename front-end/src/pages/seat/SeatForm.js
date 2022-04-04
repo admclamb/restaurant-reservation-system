@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import TableOption from "./TableOption";
-import { updateTableSeat } from "../utils/api";
-import ErrorAlert from "../layout/ErrorAlert";
+import { updateTableSeat } from "../../utils/api";
+import ErrorAlert from "../../layout/ErrorAlert";
 const SeatForm = ({ tables }) => {
   const history = useHistory();
   const { reservation_id } = useParams();

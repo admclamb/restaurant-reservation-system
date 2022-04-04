@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import ReservationForm from "../ReservationForm.js/ReservationForm";
+import ReservationForm from "../components/Form";
 import { readReservation, updateReservation } from "../utils/api";
 import {
   dateIsBeforeOtherDate,
@@ -11,7 +11,7 @@ import {
   getDayOfWeek,
 } from "../utils/date-time";
 import { OPENING_HOURS } from "../utils/opening-hours";
-const Edit = () => {
+const EditReservation = () => {
   const initReservation = {
     first_name: "",
     last_name: "",
@@ -127,4 +127,4 @@ const Edit = () => {
   );
 };
 
-export default Edit;
+export default EditReservation;

@@ -39,8 +39,8 @@ function validateReservationTime(req, res, next) {
   const day = getDayOfWeek(reservation_date);
 
   // Get opening and last call hours based on the day
-  const opening = OPENING_HOURS[day.substring(0, 3)].open;
-  const lastCall = OPENING_HOURS[day.substring(0, 3)].lastCall;
+  const opening = OPENING_HOURS[day].open;
+  const lastCall = OPENING_HOURS[day].lastCall;
   // Check if rservation is during opening hours and before last call
   if (!(reservation_time > opening && reservation_time < lastCall)) {
     return next({
@@ -130,7 +130,7 @@ function storeIsOpen(req, res, next) {
   const { data = {} } = res.locals;
   const { reservation_date } = data;
   const dayOfWeek = getDayOfWeek(reservation_date);
-  if (OPENING_HOURS.storeIsOpen(dayOfWeek.substring(0, 3))) {
+  if (OPENING_HOURS.storeIsOpen(dayOfWeek)) {
     return next();
   }
   next({
