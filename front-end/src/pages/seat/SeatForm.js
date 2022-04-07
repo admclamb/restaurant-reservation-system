@@ -49,7 +49,9 @@ const SeatForm = ({ tables }) => {
         value={table_id}
         onChange={({ target }) => setTable_id(target.value)}
       >
-        <option value="selected">Choose a Table</option>
+        <option value="" selected disabled hidden>
+          --Please choose a table--
+        </option>
         {tablesOptions}
       </select>
       <div className="form-buttons mt-4">

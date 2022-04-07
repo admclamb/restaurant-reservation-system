@@ -40,9 +40,7 @@ function Dashboard() {
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
-    listTables({ date }, abortController.signal)
-      .then(setTables)
-      .catch(setTablesError);
+    listTables(abortController.signal).then(setTables).catch(setTablesError);
     return () => abortController.abort();
   }
 

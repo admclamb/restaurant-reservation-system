@@ -8,7 +8,7 @@ const NewTable = () => {
   const history = useHistory();
   const initTable = {
     table_name: "",
-    capacity: 1,
+    capacity: 0,
   };
   const [table, setTable] = useState(initTable);
   const [tableError, setTableError] = useState(null);
@@ -25,17 +25,22 @@ const NewTable = () => {
       [id]: target.type === "number" ? +target.value : target.value,
     });
   };
+  console.log(table);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const validation = validateNewTable(table);
-    if (!validation) {
-      const abortController = new AbortController();
-      createTable(table).catch(setTableError, abortController.signal);
-      history.push("/dashboard");
-      return;
+  const handleSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const validationResponse = validateNewTable(table);
+      if (!validationResponse) {
+        const abortController = new AbortController();
+        await createTable(table, abortController.signal);
+        history.push("/dashboard");
+      } else {
+        setTableError({ message: validationResponse });
+      }
+    } catch (error) {
+      setTableError(error);
     }
-    setTableError(validation);
   };
   return (
     <main className="container pt-3 mb-5">
