@@ -25,8 +25,6 @@ const NewTable = () => {
       [id]: target.type === "number" ? +target.value : target.value,
     });
   };
-  console.log(table);
-
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();

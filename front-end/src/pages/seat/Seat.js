@@ -10,7 +10,7 @@ const Seat = () => {
   useEffect(() => {
     setTables([]);
     const abortController = new AbortController();
-    listTables(abortController.signal).then(setTables).catch(setSeatError);
+    listTables({}, abortController.signal).then(setTables).catch(setSeatError);
   }, []);
 
   return (
