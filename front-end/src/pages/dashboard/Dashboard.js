@@ -38,11 +38,11 @@ function Dashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
-      .then(setReservations)
-      .catch(setReservationsError);
+      .catch(setReservationsError)
+      .then(setReservations);
     listTables({}, abortController.signal)
-      .then(setTables)
-      .catch(setTablesError);
+      .catch(setTablesError)
+      .then(setTables);
     return () => abortController.abort();
   }
 
@@ -94,8 +94,10 @@ function Dashboard() {
 
           {/*Handles finishing up a table in the tables table */}
           <StaticBackdropModal
-            title={"Is this table ready to seat new guest?"}
-            body={"This cannot be undone."}
+            title={
+              "Is this table ready to seat new guests? This cannot be undone."
+            }
+            body={""}
             id={"finishTable"}
             responseFunction={handleFinishTable}
           />

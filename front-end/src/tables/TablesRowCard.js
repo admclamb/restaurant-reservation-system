@@ -19,7 +19,7 @@ const TablesRowCard = ({ table, setCurrTable_id }) => {
           data-bs-target="#finishTable"
           onClick={() => setCurrTable_id(table.table_id)}
         >
-          Finished
+          Finish
         </button>
       </td>
     </tr>

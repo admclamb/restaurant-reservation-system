@@ -4,7 +4,7 @@ const hasProperties = require("../utils/has-properties");
 const hasOnlyValidProperties = require("../utils/has-only-valid-properties");
 
 // Validate tables
-const VALID_TABLE_PROPERTIES = ["table_name", "capacity"];
+const VALID_TABLE_PROPERTIES = ["table_name", "capacity", "reservation_id"];
 const hasOnlyValidTableProps = hasOnlyValidProperties(
   ...VALID_TABLE_PROPERTIES
 );

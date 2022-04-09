@@ -122,15 +122,14 @@ export async function createReservation(data, signal) {
 }
 
 export async function createTable(table, signal) {
-  const url = new URL(`${API_BASE_URL}/tables`);
-  const method = "POST";
-  console.log("create table url: ", url);
-  return await fetchJson(url, {
+  const url = `${API_BASE_URL}/tables`;
+  const options = {
+    method: "POST",
     headers,
     body: JSON.stringify({ data: table }),
-    method,
     signal,
-  });
+  };
+  return await fetchJson(url, options, signal);
 }
 
 export async function updateReservation(data, reservation_id, signal) {
