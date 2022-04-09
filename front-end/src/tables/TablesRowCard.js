@@ -1,11 +1,11 @@
 const TablesRowCard = ({ table, setCurrTable_id }) => {
-  const { table_name, capacity, occupied } = table;
+  const { table_name, capacity, reservation_id } = table;
   return (
     <tr>
       <td>{table_name}</td>
       <td>{capacity}</td>
       <td data-table-id-status={table.table_id}>
-        {occupied ? "Occupied" : "Free"}
+        {reservation_id !== null ? "occupied" : "free"}
       </td>
       <td>
         {/* button trigger for finish modal */}
