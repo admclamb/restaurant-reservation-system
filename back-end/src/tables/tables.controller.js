@@ -142,6 +142,7 @@ async function seatReservation(req, res, next) {
     reservation: { reservation_id },
   } = res.locals;
   const data = await service.seatReservation(table_id, reservation_id);
+  console.log("backend data: ", data);
   res.status(200).json({ data });
 }
 

@@ -105,7 +105,7 @@ const EditReservation = () => {
       event.preventDefault();
       history.goBack();
       const abortController = new AbortController();
-      const response = await updateReservation(
+      await updateReservation(
         reservation,
         reservation_id,
         abortController.signal

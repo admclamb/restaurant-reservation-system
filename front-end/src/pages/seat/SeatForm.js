@@ -43,15 +43,14 @@ const SeatForm = ({ tables }) => {
       <ErrorAlert error={tableError} />
       <label htmlFor="table-select">Select Table</label>
       <select
+        name="table_id"
         className="form-select"
-        aria-label="Table selection"
+        aria-label="TableSelection"
         id="table-select"
         value={table_id}
         onChange={({ target }) => setTable_id(target.value)}
       >
-        <option value="" selected disabled hidden>
-          --Please choose a table--
-        </option>
+        <option value="">--Please choose a table--</option>
         {tablesOptions}
       </select>
       <div className="form-buttons mt-4">

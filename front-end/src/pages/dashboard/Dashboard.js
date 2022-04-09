@@ -30,9 +30,9 @@ function Dashboard() {
     if (queryDate) {
       setDate(queryDate);
     }
-  }, []);
+  }, [query]);
 
-  useEffect(() => loadDashboard(), [date]);
+  useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
@@ -51,8 +51,8 @@ function Dashboard() {
     const abortController = new AbortController();
     setTablesError(null);
     finishReservationTable(currTable_id, abortController.signal)
-      .catch(setTablesError)
-      .then(loadDashboard);
+      .then(loadDashboard)
+      .catch(setTablesError);
   }
 
   // Cancels reservation
@@ -64,8 +64,8 @@ function Dashboard() {
       "cancelled",
       abortController.signal
     )
-      .catch(setReservationsError)
-      .then(loadDashboard);
+      .then(loadDashboard)
+      .catch(setReservationsError);
   }
 
   return (

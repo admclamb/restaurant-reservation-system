@@ -39,7 +39,7 @@ function update(updatedTable) {
 
 async function seatReservation(table_id, reservation_id) {
   try {
-    await knex.transaction(async (trx) => {
+    return knex.transaction(async (trx) => {
       const table = await trx("tables")
         .select("*")
         .where({ table_id })
