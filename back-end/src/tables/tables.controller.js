@@ -1,55 +1,52 @@
 const service = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const hasProperties = require("../utils/has-properties");
 const hasOnlyValidProperties = require("../utils/has-only-valid-properties");
 
 // Validate tables
-const VALID_TABLE_PROPERTIES = ["table_name", "capacity", "reservation_id"];
-const hasOnlyValidTableProps = hasOnlyValidProperties(
-  ...VALID_TABLE_PROPERTIES
-);
-const hasRequiredTableProperties = hasProperties(...VALID_TABLE_PROPERTIES);
+const VALID_PROPERTIES = ["capacity", "table_name", "reservation_id"];
 
-function validateTableName(req, res, next) {
-  const { table_name = "" } = req.body.data;
-  if (table_name.length > 1) {
-    return next();
-  }
-  next({ status: 400, message: "table_name" });
-}
+function hasRequiredProperties(req, res, next) {
+  const { data } = req.body || {};
+  if (!data)
+    return next({
+      status: 400,
+      message: "Required table data is missing.",
+    });
+  const { table_name = null, capacity = null } = data;
+  if (!table_name)
+    return next({
+      status: 400,
+      message: "Required property table_name is missing",
+    });
+  if (typeof table_name !== "string" || table_name.length < 2)
+    return next({
+      status: 400,
+      message:
+        "Property table_name must be a string which is at least 2 characters long.",
+    });
 
-function validateCapacity(req, res, next) {
-  const { capacity } = req.body.data;
-  if (!capacity) {
+  if (typeof capacity !== "number" || isNaN(capacity) || !capacity) {
     return next({
       status: 400,
-      message: "capacity",
-    });
-  }
-  if (typeof capacity !== "number") {
-    return next({
-      status: 400,
-      message: "capacity",
-    });
-  }
-  if (capacity <= 0) {
-    return next({
-      status: 400,
-      message: "capacity",
+      message:
+        "Required property capacity is missing or zero. Must be a number greater than zero.",
     });
   }
   next();
 }
-async function hasSufficientCapacity(req, res, next) {
-  const { table = {} } = res.locals;
-  const { capacity = "" } = table;
-  const { reservation_id = "" } = req.body.data;
-  const reservation = (await service.readReservationID(reservation_id)) || {};
-  const { people = null } = reservation;
-  if (people <= capacity) {
-    return next();
-  }
-  next({ status: 400, message: "capacity" });
+
+const hasOnlyValidProps = hasOnlyValidProperties(...VALID_PROPERTIES);
+
+function hasRequiredSeatingProperties(req, res, next) {
+  const { data } = req.body || {};
+  let message;
+  if (!data)
+    message = "Required reservation data missing for table. No data provided.";
+  const { reservation_id } = data || "";
+  if (!reservation_id)
+    message =
+      "Required reservation data missing for table. Missing reservation_id.";
+  message ? next({ status: 400, message }) : next();
 }
 
 async function tableExists(req, res, next) {
@@ -74,35 +71,6 @@ async function reservationExist(req, res, next) {
   }
   // make string rather than INT for consistency
   next({ status: 404, message: reservation_id + "" });
-}
-
-function validateDataProperty(req, res, next) {
-  const { data = null } = req.body;
-  if (data) {
-    return next();
-  }
-  next({ status: 400, message: "data" });
-}
-
-function validateReservationID(req, res, next) {
-  const { data = {} } = req.body;
-  const { reservation_id = null } = req.body.data;
-  if (!data["reservation_id"]) {
-    return next({ status: 400, message: "reservation_id" });
-  }
-  if (reservation_id) {
-    return next();
-  }
-  next({ status: 400, message: "reservation_id" });
-}
-
-// Returns error if table is occupied
-function tableIsUnoccupied(req, res, next) {
-  const { table = {} } = res.locals;
-  if (table.occupied) {
-    return next({ status: 400, message: "occupied" });
-  }
-  next();
 }
 
 // Returns error if table is unoccupied
@@ -146,44 +114,53 @@ async function seatReservation(req, res, next) {
   res.status(200).json({ data });
 }
 
-// Checks if reservation is seated
-async function reservationIsSeated(req, res, next) {
-  const { status } = res.locals.reservation;
-  if (status === "seated") {
-    return next({ status: 400, message: "seated" });
+function canSeatReservation(req, res, next) {
+  const { status } = res.locals.reservation || null;
+  if (status !== "booked") {
+    return next({
+      status: 400,
+      message: `Cannot seat a reservation which is not booked. Status of reservation: ${status}`,
+    });
   }
   next();
 }
 
+function canSeatTable(req, res, next) {
+  const { capacity, table_name, reservation_id } = res.locals.table;
+  const { people } = res.locals.reservation;
+  let message;
+  if (people > capacity) {
+    message = `Table ${table_name} only has capacity for ${capacity} guests. Requested party size ${people}.`;
+  }
+  if (reservation_id) message = `${table_name} is already occupied.`;
+  message ? next({ status: 400, message }) : next();
+}
+
 // updates reservation to finished and updates occupied table
-async function destroy(req, res, next) {
-  const data = await service.finishTable(res.locals.table);
+async function finishTable(req, res, next) {
+  const data = await service.finish(res.locals.table);
   res.status(200).json({ data: res.locals.table });
 }
 
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
-    hasRequiredTableProperties,
-    hasOnlyValidTableProps,
-    validateCapacity,
-    validateTableName,
+    hasRequiredProperties,
+    hasOnlyValidProps,
     asyncErrorBoundary(create),
   ],
   read: [asyncErrorBoundary(tableExists), asyncErrorBoundary(read)],
   seat: [
     asyncErrorBoundary(tableExists),
-    validateDataProperty,
-    validateReservationID,
+    hasRequiredSeatingProperties,
     asyncErrorBoundary(reservationExist),
-    reservationIsSeated,
-    asyncErrorBoundary(hasSufficientCapacity),
-    tableIsUnoccupied,
+    canSeatReservation,
+    canSeatTable,
     asyncErrorBoundary(seatReservation),
   ],
-  destroy: [
+  finishTable: [
     asyncErrorBoundary(tableExists),
     tableIsOccupied,
-    asyncErrorBoundary(destroy),
+    asyncErrorBoundary(finishTable),
   ],
 };

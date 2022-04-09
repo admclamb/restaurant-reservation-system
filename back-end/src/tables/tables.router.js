@@ -11,7 +11,7 @@ router
 router
   .route("/:table_id/seat")
   .put(controller.seat)
-  .delete(controller.destroy)
+  .delete(controller.finishTable)
   .all(methodNotAllowed);
 
 router.route("/:table_id").get(controller.read).all(methodNotAllowed);

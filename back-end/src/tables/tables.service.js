@@ -58,7 +58,7 @@ async function seatReservation(table_id, reservation_id) {
   }
 }
 
-function finishTable(table) {
+function finish(table) {
   return knex.transaction(async (transaction) => {
     await knex("reservations")
       .where({ reservation_id: table.reservation_id })
@@ -85,6 +85,6 @@ module.exports = {
   update,
   destroyReservation,
   updateReservation,
-  finishTable,
+  finish,
   seatReservation,
 };
