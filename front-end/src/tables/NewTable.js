@@ -1,30 +1,15 @@
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
 import { createTable } from "../utils/api";
 import { validateNewTable } from "../utils/validation";
+import TableForm from "./TableForm";
 
 const NewTable = () => {
+  const [table, setTable] = useState({ table_name: "", capacity: 0 });
+  const [errors, setErrors] = useState(null);
   const history = useHistory();
-  const initTable = {
-    table_name: "",
-    capacity: 0,
-  };
-  const [table, setTable] = useState(initTable);
-  const [tableError, setTableError] = useState(null);
-  const handleCancel = () => {
-    history.goBack();
-    return;
-  };
 
-  const handleChange = ({ target }) => {
-    const { id } = target;
-
-    setTable({
-      ...table,
-      [id]: target.type === "number" ? +target.value : target.value,
-    });
-  };
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -34,57 +19,27 @@ const NewTable = () => {
         await createTable(table, abortController.signal);
         history.push("/dashboard");
       } else {
-        setTableError({ message: validationResponse });
+        setErrors(validationResponse);
       }
     } catch (error) {
-      setTableError(error);
+      setErrors(error);
     }
   };
   return (
-    <main className="container pt-3 mb-5">
-      <h1>New Table</h1>
-      <ErrorAlert error={tableError} />
-      <form className="row g-3" id="new-table-form" onSubmit={handleSubmit}>
-        <div className="col-12">
-          <label htmlFor="table_name">Table Name</label>
-          <input
-            name="table_name"
-            id="table_name"
-            placeholder="Table Name"
-            className="form-control"
-            value={table.table_name}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="col-12">
-          <label htmlFor="capacity">Capacity</label>
-          <input
-            name="capacity"
-            id="capacity"
-            placeholder="Capacity"
-            type="number"
-            className="form-control"
-            value={table.capacity}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-btns">
-          <button className="btn btn-secondary me-3" onClick={handleCancel}>
-            Cancel
-          </button>
-          <button
-            className="btn btn-main"
-            type="submit"
-            form="new-table-form"
-            value="Submit"
-          >
-            Submit
-          </button>
-        </div>
-      </form>
-    </main>
+    <>
+      <header className="container pt-3 mb-3">
+        <h1>New Table</h1>
+      </header>
+      <main className="container">
+        <ErrorAlert error={errors} />
+        <TableForm
+          table={table}
+          setTable={setTable}
+          handleSubmit={handleSubmit}
+          history={history}
+        />
+      </main>
+    </>
   );
 };
-
 export default NewTable;

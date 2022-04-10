@@ -1,9 +1,9 @@
-import { formatAsDate, previous, next, today } from "../../utils/date-time";
-import ChangeDate from "./ChangeDate";
-const DashboardNavbar = ({ date, setDate }) => {
+import { formatAsDate, previous, next, today } from "../utils/date-time";
+
+const DashboardNav = ({ date, setDate }) => {
   return (
     <nav className=" dashboard-nav dashboard-controls">
-      <div className="container-fluid d-flex justify-content-between align-items-center pt-3 pb-3">
+      <div className="d-flex justify-content-between align-items-center pt-3 pb-3">
         <div className="left d-flex">
           <div className="date me-4">
             <h3>{formatAsDate(date)}</h3>
@@ -35,11 +35,16 @@ const DashboardNavbar = ({ date, setDate }) => {
 
         <div className="right d-flex align-items-center">
           <p className="me-3">Date</p>
-          <ChangeDate date={date} setDate={setDate} />
+          <input
+            type="date"
+            className="form-control"
+            value={date}
+            onChange={(event) => setDate(event.target.value)}
+          />
         </div>
       </div>
     </nav>
   );
 };
 
-export default DashboardNavbar;
+export default DashboardNav;

@@ -1,4 +1,26 @@
-const Form = ({ reservation, handleSubmit, handleChange, handleCancel }) => {
+const ReservationForm = ({
+  reservation,
+  setReservation,
+  handleSubmit,
+  handleCancel,
+}) => {
+  const handleChange = ({ target }) => {
+    const { id } = target;
+    // Ensure that the data type is a number
+    if (target.type === "number") {
+      setReservation({
+        ...reservation,
+        [id]: Number(target.value),
+      });
+    } else {
+      setReservation({
+        ...reservation,
+        [id]: target.value,
+      });
+    }
+    return;
+  };
+
   return (
     <form className="row g-3" id="new-reservation-form" onSubmit={handleSubmit}>
       <div className="col-md-4">
@@ -110,4 +132,4 @@ const Form = ({ reservation, handleSubmit, handleChange, handleCancel }) => {
   );
 };
 
-export default Form;
+export default ReservationForm;

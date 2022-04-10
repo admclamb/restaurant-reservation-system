@@ -1,0 +1,3 @@
+.reservations-list:not(:last-child) {
+  margin-bottom: 2rem;
+}

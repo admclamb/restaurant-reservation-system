@@ -43,7 +43,7 @@ async function seatReservation(table_id, reservation_id) {
       const table = await trx("tables")
         .select("*")
         .where({ table_id })
-        .update({ reservation_id, occupied: true }, "*")
+        .update({ reservation_id }, "*")
         .then((updatedRecords) => updatedRecords[0]);
 
       await trx("reservations")
@@ -67,7 +67,7 @@ function finish(table) {
 
     return knex("tables")
       .where({ table_id: table.table_id })
-      .update({ reservation_id: null, occupied: false }, "*")
+      .update({ reservation_id: null }, "*")
       .transacting(transaction)
       .then((records) => records[0]);
   });

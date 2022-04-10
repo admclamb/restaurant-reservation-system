@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
-import ReservationForm from "../components/Form";
+import ReservationForm from "./ReservationForm";
 import { readReservation, updateReservation } from "../utils/api";
 import {
   dateIsBeforeOtherDate,
@@ -43,22 +43,6 @@ const EditReservation = () => {
     }
     getReservation();
   }, [reservation_id]);
-  const handleChange = ({ target }) => {
-    const { id } = target;
-    // Ensure that the data type is a number
-    if (target.type === "number") {
-      setReservation({
-        ...reservation,
-        [id]: Number(target.value),
-      });
-    } else {
-      setReservation({
-        ...reservation,
-        [id]: target.value,
-      });
-    }
-    return;
-  };
 
   const handleCancel = () => {
     setReservation();
@@ -103,13 +87,13 @@ const EditReservation = () => {
         return;
       }
       event.preventDefault();
-      history.goBack();
       const abortController = new AbortController();
       await updateReservation(
         reservation,
         reservation_id,
         abortController.signal
       );
+      history.push(`/dashboard?date=${reservation_date}`);
     } catch (error) {
       setReservationError({ message: error });
     }
@@ -121,8 +105,8 @@ const EditReservation = () => {
         <ErrorAlert error={reservationError} />
         <ReservationForm
           reservation={reservation}
+          setReservation={setReservation}
           handleCancel={handleCancel}
-          handleChange={handleChange}
           handleSubmit={handleSubmit}
         />
       </main>

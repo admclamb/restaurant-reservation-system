@@ -1,23 +1,23 @@
-import TablesTableRows from "./TablesTableRows";
-
-const Tables = ({ tables, setCurrTable_id }) => {
-  return (
-    <>
-      <table className="table container-fluid">
-        <thead>
-          <tr className="bg-main--light">
-            <th scope="col">Table Name</th>
-            <th scope="col">Capacity</th>
-            <th scope="col">Free/Occupied</th>
-            <th scope="col">Finished Meal</th>
-          </tr>
-        </thead>
-        <tbody>
-          <TablesTableRows tables={tables} setCurrTable_id={setCurrTable_id} />
-        </tbody>
-      </table>
-    </>
-  );
+import TableCard from "./TableCard";
+const Tables = ({ tables, setTablesError, loadDashboard }) => {
+  if (Array.isArray(tables) && tables.length > 0) {
+    const tablesList = tables.map((table) => {
+      return (
+        <TableCard
+          table={table}
+          key={table.table_id}
+          setTablesError={setTablesError}
+          loadDashboard={loadDashboard}
+        />
+      );
+    });
+    return (
+      <section className="tables-list d-flex flex-column row container-fluid">
+        {tablesList}
+      </section>
+    );
+  }
+  return <div className="alert alert-secondary">No Tables found</div>;
 };
 
 export default Tables;

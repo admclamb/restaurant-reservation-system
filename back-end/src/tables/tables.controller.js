@@ -75,8 +75,8 @@ async function reservationExist(req, res, next) {
 
 // Returns error if table is unoccupied
 function tableIsOccupied(req, res, next) {
-  const { table = {} } = res.locals;
-  if (table.occupied) {
+  const { reservation_id } = res.locals.table;
+  if (reservation_id) {
     return next();
   }
   next({ status: 400, message: "not occupied" });
@@ -94,7 +94,6 @@ async function list(req, res) {
 async function create(req, res) {
   const { data = {} } = req.body;
   const createdTable = await service.create(data);
-  console.log(createdTable);
   res.status(201).json({ data: createdTable });
 }
 
@@ -110,7 +109,6 @@ async function seatReservation(req, res, next) {
     reservation: { reservation_id },
   } = res.locals;
   const data = await service.seatReservation(table_id, reservation_id);
-  console.log("backend data: ", data);
   res.status(200).json({ data });
 }
 

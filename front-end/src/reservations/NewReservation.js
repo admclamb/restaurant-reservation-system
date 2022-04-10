@@ -1,15 +1,10 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { createReservation } from "../utils/api";
+import { useState } from "react";
+import { useHistory } from "react-router";
 import ErrorAlert from "../layout/ErrorAlert";
-import {
-  today,
-  time,
-  getDayOfWeek,
-  dateIsBeforeOtherDate,
-} from "../utils/date-time";
-import { OPENING_HOURS } from "../utils/opening-hours";
-import ReservationForm from "../components/Form";
+import ReservationForm from "./ReservationForm";
+import { createReservation } from "../utils/api";
+import { validateNewReservation } from "../utils/validation";
+
 const NewReservation = () => {
   const initReservation = {
     first_name: "",
@@ -20,92 +15,42 @@ const NewReservation = () => {
     people: 1,
     status: "booked",
   };
-
   const [reservation, setReservation] = useState(initReservation);
-  const [reservationError, setReservationError] = useState(null);
+  const [errors, setErrors] = useState(null);
   const history = useHistory();
-  const handleChange = ({ target }) => {
-    const { id } = target;
-    // Ensure that the data type is a number
-    if (target.type === "number") {
-      setReservation({
-        ...reservation,
-        [id]: Number(target.value),
-      });
-    } else {
-      setReservation({
-        ...reservation,
-        [id]: target.value,
-      });
-    }
-    return;
-  };
-
-  const handleCancel = () => {
-    setReservation(initReservation);
-    history.push("/");
-    return;
-  };
-
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    const { reservation_date = "", reservation_time = "" } = reservation;
-    const dateIsBeforeToday = dateIsBeforeOtherDate(
-      reservation.reservation_date,
-      today()
-    );
-
-    const day = await getDayOfWeek(reservation_date);
-    if (!day) {
-      return;
-    }
-    const opening = OPENING_HOURS[day.substring(0, 3)].open;
-    const lastCall = OPENING_HOURS[day.substring(0, 3)].lastCall;
-
-    // Check if reservation is during opening hours and before last call
-    if (!(reservation_time > opening && reservation_time < lastCall)) {
-      setReservationError({
-        message: `The store opens ${day} at ${opening} and last call is ${lastCall}.`,
-      });
-      return;
-    }
-    // Check if reservation is today and if so if its later than current time
-    if (reservation_date === today() && reservation_time < time()) {
-      setReservationError({
-        message: "The reservation is before the current time of today.",
-      });
-    }
-
-    // if date is before tdoay
-    if (dateIsBeforeToday) {
-      setReservationError({ message: "This date is set before today." });
-      return;
-    }
-    //lowercase string first three letters such as mon, tue, wed, etc.
-    if (!OPENING_HOURS.storeIsOpen(day.substring(0, 3))) {
-      setReservationError({ message: "The store is not open on that day" });
-      return;
-    }
     try {
-      const abortController = new AbortController();
-      await createReservation(reservation, abortController.signal);
-      setReservation(initReservation);
-      history.push(`/dashboard?date=${reservation.reservation_date}`);
+      event.preventDefault();
+      const validationErrors = await validateNewReservation(reservation);
+      if (!validationErrors) {
+        const abortController = new AbortController();
+        await createReservation(reservation, abortController.signal);
+        history.push(`/dashboard?date=${reservation.reservation_date}`);
+      } else {
+        setErrors(validationErrors);
+      }
     } catch (error) {
-      setReservationError(error);
+      setErrors(error);
     }
+  };
+  const handleCancel = () => {
+    history.goBack();
   };
   return (
-    <main className="container pt-3 mb-5">
-      <h1>New Reservation</h1>
-      <ErrorAlert error={reservationError} />
-      <ReservationForm
-        reservation={reservation}
-        handleCancel={handleCancel}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-      />
-    </main>
+    <>
+      <header className="container-fluid">
+        <h1 className="mt-3 mb-3">New Reservation</h1>
+      </header>
+      <main className="container-fluid">
+        <ErrorAlert error={errors} />
+        <ReservationForm
+          reservation={reservation}
+          setReservation={setReservation}
+          handleSubmit={handleSubmit}
+          handleCancel={handleCancel}
+        />
+      </main>
+    </>
   );
 };
 

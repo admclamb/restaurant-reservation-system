@@ -27,25 +27,25 @@ function Menu() {
         <ul className="nav navbar-nav text-light" id="accordionSidebar">
           <li className="nav-item">
             <Link className="nav-link" to="/dashboard">
-              <span className="oi oi-dashboard" />
+              <i className="fa-solid fa-gauge me-1"></i>
               &nbsp;Dashboard
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/search">
-              <span className="oi oi-magnifying-glass" />
+              <i className="fa-solid fa-magnifying-glass me-1"></i>
               &nbsp;Search
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/reservations/new">
-              <span className="oi oi-plus" />
+              <i className="fa-solid fa-plus me-1"></i>
               &nbsp;New Reservation
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/tables/new">
-              <span className="oi oi-layers" />
+              <i className="fa-solid fa-layer-group me-1"></i>
               &nbsp;New Table
             </Link>
           </li>

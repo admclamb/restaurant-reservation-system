@@ -1,7 +1,7 @@
 import { useState } from "react";
-import ReservationsTable from "../../reservations/ReservationsTable";
-import ErrorAlert from "../../layout/ErrorAlert";
-import { list_reservations_phone } from "../../utils/api";
+import Reservations from "../reservations/Reservations";
+import ErrorAlert from "../layout/ErrorAlert";
+import { list_reservations_phone } from "../utils/api";
 
 const Search = () => {
   const [foundReservations, setFoundReservations] = useState([]);
@@ -55,7 +55,7 @@ const Search = () => {
           </div>
         </form>
         <section className="mt-4">
-          <ReservationsTable reservations={foundReservations} />
+          <Reservations reservations={foundReservations} />
         </section>
       </main>
     </>
