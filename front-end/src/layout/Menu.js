@@ -20,7 +20,7 @@ function Menu() {
           to="/"
         >
           <div className="sidebar-brand-text mx-3">
-            <span>Periodic Tables</span>
+            <span className="d-none d-md-inline">Periodic Tables</span>
           </div>
         </Link>
         <hr className="sidebar-divider my-0" />
@@ -28,25 +28,25 @@ function Menu() {
           <li className="nav-item">
             <Link className="nav-link" to="/dashboard">
               <i className="fa-solid fa-gauge me-1"></i>
-              &nbsp;Dashboard
+              <span className="d-none d-md-inline">&nbsp;Dashboard</span>
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/search">
               <i className="fa-solid fa-magnifying-glass me-1"></i>
-              &nbsp;Search
+              <span className="d-none d-md-inline">&nbsp;Search</span>
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/reservations/new">
               <i className="fa-solid fa-plus me-1"></i>
-              &nbsp;New Reservation
+              <span className="d-none d-md-inline">&nbsp;New Reservation</span>
             </Link>
           </li>
           <li className="nav-item">
             <Link className="nav-link" to="/tables/new">
               <i className="fa-solid fa-layer-group me-1"></i>
-              &nbsp;New Table
+              <span className="d-none d-md-inline">&nbsp;New Table</span>
             </Link>
           </li>
         </ul>
