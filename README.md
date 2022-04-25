@@ -6,8 +6,8 @@ Periodic Tables is a restaurant reservation system for fine dining restaurants. 
 
 ## LINKS
 
-- [Live App](https://dashboard.heroku.com/apps/res-front-end)
-- [Live Server](https://dashboard.heroku.com/apps/res-back-end)
+- [Live App](https://res-front-end.herokuapp.com/dashboard)
+- [Live Server](https://res-back-end.herokuapp.com/)
 
 #
 
