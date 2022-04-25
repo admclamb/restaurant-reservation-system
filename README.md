@@ -1,7 +1,3 @@
-![Periodic Tables](https://raw.githubusercontent.com/micah-patrick/restaurant-reservation/main/front-end/src/readme/readme-header.png 'Periodic Tables')
-
-#
-
 # Periodic Tables | Restaurant Reservation System
 
 Periodic Tables is a restaurant reservation system for fine dining restaurants. Users of the application are restaurant employees who wish to take reservations when a customer calls and to seat them when they come in to the restaurant.
@@ -10,8 +6,8 @@ Periodic Tables is a restaurant reservation system for fine dining restaurants. 
 
 ## LINKS
 
-- [Live App](https://dry-brook-13595.herokuapp.com/)
-- [Live Server](https://warm-crag-78549.herokuapp.com/reservations)
+- [Live App](https://dashboard.heroku.com/apps/res-front-end)
+- [Live Server](https://dashboard.heroku.com/apps/res-back-end)
 
 #
 
@@ -50,39 +46,6 @@ The restaurant manager wants to be able to easily see the status of the reservat
 The restaurant manager wants to be able to search for a reservation by phone number so that if they call with a question, she can quickly find their reservation. _Periodic Tables_ allows her to search a partial or complete phone number and get back a list of all matching reservations.
 
 The restaurant manager wants to be able to modify or cancel a reservation to keep the reservations up to date. _Periodic Tables_ allows reservations that have not yet been seated to be edited or canceled.
-
-#
-
-## SCREENSHOTS
-
-### Home Page / Dashboard:
-
-The Dashboard displays a date, buttons and a date picker to change date, and lists of reservations (for the given date) and all tables.
-
-`path = '/dashboard'
-![dashboard](https://raw.githubusercontent.com/micah-patrick/restaurant-reservation/main/front-end/src/readme/screenshot-dash.png)
-
-### Search:
-
-The Search page displays reservations with phone numbers matching the search input. The search works with full or partial phone numbers.
-`path = '/search'
-![search](https://raw.githubusercontent.com/micah-patrick/restaurant-reservation/main/front-end/src/readme/screenshot-search.png)
-
-### Status:
-
-Reservations can have a `status` of _booked, seated, finished,_ or _cancelled_.
-
-![search](https://raw.githubusercontent.com/micah-patrick/restaurant-reservation/main/front-end/src/readme/screenshot-status.png)
-Tables can be _occupied_ or _free_
-![search](https://raw.githubusercontent.com/micah-patrick/restaurant-reservation/main/front-end/src/readme/screenshot-tables.png)
-
-#
-
-## API
-
-### ERD:
-
-![erd](https://raw.githubusercontent.com/micah-patrick/restaurant-reservation/main/front-end/src/readme/erd.png 'erd')
 
 ### Reservations
 
