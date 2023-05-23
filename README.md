@@ -28,10 +28,7 @@ Periodic Tables is a restaurant reservation system for fine dining restaurants. 
 - Node.js
 - Express
 - Knex
-- Cors
-- Dotenv
-
-#
+- PostgreSQL
 
 ## DESCRIPTION
 
